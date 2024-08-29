@@ -1,0 +1,392 @@
+{
+    "general": {
+        "date": "2021-08-25 16:22:50",
+        "title": "H3K27ac_NR1I3_agonist_27h",
+        "description": "H3K27ac_NR1I3_agonist_27hGSE104060_liver_nr1i3_agonist",
+        "pipeline_ver": "v1.7.1",
+        "pipeline_type": "tf",
+        "genome": "mm10",
+        "aligner": "bowtie2",
+        "seq_endedness": {
+            "rep1": {
+                "paired_end": true
+            },
+            "rep2": {
+                "paired_end": true
+            },
+            "rep3": {
+                "paired_end": true
+            },
+            "rep4": {
+                "paired_end": true
+            }
+        },
+        "peak_caller": "spp"
+    },
+    "align": {
+        "samstat": {
+            "rep1": {
+                "total_reads": 36688458,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 35665907,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 97.2,
+                "paired_reads": 36688458,
+                "paired_reads_qc_failed": 0,
+                "read1": 18344229,
+                "read1_qc_failed": 0,
+                "read2": 18344229,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 34721418,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 94.6,
+                "with_itself": 35340040,
+                "with_itself_qc_failed": 0,
+                "singletons": 325867,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.8999999999999999,
+                "diff_chroms": 439644,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep2": {
+                "total_reads": 40835998,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 39691020,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 97.2,
+                "paired_reads": 40835998,
+                "paired_reads_qc_failed": 0,
+                "read1": 20417999,
+                "read1_qc_failed": 0,
+                "read2": 20417999,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 39181256,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 95.89999999999999,
+                "with_itself": 39354942,
+                "with_itself_qc_failed": 0,
+                "singletons": 336078,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.8,
+                "diff_chroms": 82544,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep3": {
+                "total_reads": 38317930,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 37302113,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 97.3,
+                "paired_reads": 38317930,
+                "paired_reads_qc_failed": 0,
+                "read1": 19158965,
+                "read1_qc_failed": 0,
+                "read2": 19158965,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 36881542,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 96.3,
+                "with_itself": 37023174,
+                "with_itself_qc_failed": 0,
+                "singletons": 278939,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.7000000000000001,
+                "diff_chroms": 67591,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep4": {
+                "total_reads": 39746742,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 38808070,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 97.6,
+                "paired_reads": 39746742,
+                "paired_reads_qc_failed": 0,
+                "read1": 19873371,
+                "read1_qc_failed": 0,
+                "read2": 19873371,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 38427024,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 96.7,
+                "with_itself": 38553248,
+                "with_itself_qc_failed": 0,
+                "singletons": 254822,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.6,
+                "diff_chroms": 56055,
+                "diff_chroms_qc_failed": 0
+            }
+        },
+        "dup": {
+            "rep1": {
+                "unpaired_reads": 0,
+                "paired_reads": 14594221,
+                "unmapped_reads": 0,
+                "unpaired_duplicate_reads": 0,
+                "paired_duplicate_reads": 229619,
+                "paired_optical_duplicate_reads": 0,
+                "pct_duplicate_reads": 1.5734000000000001
+            },
+            "rep2": {
+                "unpaired_reads": 0,
+                "paired_reads": 16764075,
+                "unmapped_reads": 0,
+                "unpaired_duplicate_reads": 0,
+                "paired_duplicate_reads": 369279,
+                "paired_optical_duplicate_reads": 0,
+                "pct_duplicate_reads": 2.2028
+            },
+            "rep3": {
+                "unpaired_reads": 0,
+                "paired_reads": 16217627,
+                "unmapped_reads": 0,
+                "unpaired_duplicate_reads": 0,
+                "paired_duplicate_reads": 327511,
+                "paired_optical_duplicate_reads": 0,
+                "pct_duplicate_reads": 2.0195000000000003
+            },
+            "rep4": {
+                "unpaired_reads": 0,
+                "paired_reads": 16575569,
+                "unmapped_reads": 0,
+                "unpaired_duplicate_reads": 0,
+                "paired_duplicate_reads": 252495,
+                "paired_optical_duplicate_reads": 0,
+                "pct_duplicate_reads": 1.5233
+            }
+        },
+        "nodup_samstat": {
+            "rep1": {
+                "total_reads": 28729204,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 28729204,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 100.0,
+                "paired_reads": 28729204,
+                "paired_reads_qc_failed": 0,
+                "read1": 14364602,
+                "read1_qc_failed": 0,
+                "read2": 14364602,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 28729204,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 100.0,
+                "with_itself": 28729204,
+                "with_itself_qc_failed": 0,
+                "singletons": 0,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.0,
+                "diff_chroms": 0,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep2": {
+                "total_reads": 32789592,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 32789592,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 100.0,
+                "paired_reads": 32789592,
+                "paired_reads_qc_failed": 0,
+                "read1": 16394796,
+                "read1_qc_failed": 0,
+                "read2": 16394796,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 32789592,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 100.0,
+                "with_itself": 32789592,
+                "with_itself_qc_failed": 0,
+                "singletons": 0,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.0,
+                "diff_chroms": 0,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep3": {
+                "total_reads": 31780232,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 31780232,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 100.0,
+                "paired_reads": 31780232,
+                "paired_reads_qc_failed": 0,
+                "read1": 15890116,
+                "read1_qc_failed": 0,
+                "read2": 15890116,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 31780232,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 100.0,
+                "with_itself": 31780232,
+                "with_itself_qc_failed": 0,
+                "singletons": 0,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.0,
+                "diff_chroms": 0,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep4": {
+                "total_reads": 32646148,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 32646148,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 100.0,
+                "paired_reads": 32646148,
+                "paired_reads_qc_failed": 0,
+                "read1": 16323074,
+                "read1_qc_failed": 0,
+                "read2": 16323074,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 32646148,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 100.0,
+                "with_itself": 32646148,
+                "with_itself_qc_failed": 0,
+                "singletons": 0,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.0,
+                "diff_chroms": 0,
+                "diff_chroms_qc_failed": 0
+            }
+        }
+    },
+    "lib_complexity": {
+        "lib_complexity": {
+            "rep1": {
+                "total_fragments": 14593219,
+                "distinct_fragments": 14363621,
+                "positions_with_one_read": 222096,
+                "NRF": 0.984267,
+                "PBC1": 0.9843,
+                "PBC2": 63.657666
+            },
+            "rep2": {
+                "total_fragments": 16763215,
+                "distinct_fragments": 16393954,
+                "positions_with_one_read": 354315,
+                "NRF": 0.977972,
+                "PBC1": 0.97795,
+                "PBC2": 45.24921
+            },
+            "rep3": {
+                "total_fragments": 16217032,
+                "distinct_fragments": 15889533,
+                "positions_with_one_read": 315603,
+                "NRF": 0.979805,
+                "PBC1": 0.979771,
+                "PBC2": 49.328105
+            },
+            "rep4": {
+                "total_fragments": 16574950,
+                "distinct_fragments": 16322466,
+                "positions_with_one_read": 245730,
+                "NRF": 0.984767,
+                "PBC1": 0.984746,
+                "PBC2": 65.411187
+            }
+        }
+    },
+    "align_enrich": {
+        "xcor_score": {
+            "rep1": {
+                "subsampled_reads": 14576656,
+                "estimated_fragment_len": 180,
+                "corr_estimated_fragment_len": 0.265112647858254,
+                "phantom_peak": 50,
+                "corr_phantom_peak": 0.2372287,
+                "argmin_corr": 1500,
+                "min_corr": 0.1989531,
+                "NSC": 1.332539,
+                "RSC": 1.728505
+            },
+            "rep2": {
+                "subsampled_reads": 15000000,
+                "estimated_fragment_len": 185,
+                "corr_estimated_fragment_len": 0.292107609564835,
+                "phantom_peak": 55,
+                "corr_phantom_peak": 0.2534549,
+                "argmin_corr": 1500,
+                "min_corr": 0.2018758,
+                "NSC": 1.446967,
+                "RSC": 1.749386
+            },
+            "rep3": {
+                "subsampled_reads": 15000000,
+                "estimated_fragment_len": 180,
+                "corr_estimated_fragment_len": 0.309114674789778,
+                "phantom_peak": 55,
+                "corr_phantom_peak": 0.2680158,
+                "argmin_corr": 1500,
+                "min_corr": 0.2116136,
+                "NSC": 1.460751,
+                "RSC": 1.728675
+            },
+            "rep4": {
+                "subsampled_reads": 15000000,
+                "estimated_fragment_len": 180,
+                "corr_estimated_fragment_len": 0.270008354963501,
+                "phantom_peak": 55,
+                "corr_phantom_peak": 0.2467648,
+                "argmin_corr": 1500,
+                "min_corr": 0.208187,
+                "NSC": 1.296951,
+                "RSC": 1.602512
+            }
+        },
+        "jsd": {
+            "rep1": {
+                "auc": 0.18132430875266506,
+                "syn_auc": 0.4912742072288149,
+                "x_intercept": 0.2018983899477713,
+                "syn_x_intercept": 7.047930132274133e-112,
+                "elbow_pt": 0.7269769729738377,
+                "syn_elbow_pt": 0.5039389483470851,
+                "syn_jsd": 0.42037422802526
+            },
+            "rep2": {
+                "auc": 0.17227990452231362,
+                "syn_auc": 0.4918338110471586,
+                "x_intercept": 0.1940420869092276,
+                "syn_x_intercept": 6.457858738613542e-128,
+                "elbow_pt": 0.7369148263974982,
+                "syn_elbow_pt": 0.5022811217675683,
+                "syn_jsd": 0.44485672401008586
+            },
+            "rep3": {
+                "auc": 0.1437365983519727,
+                "syn_auc": 0.4916993757462058,
+                "x_intercept": 0.23931630767754164,
+                "syn_x_intercept": 9.104792399639409e-124,
+                "elbow_pt": 0.7720732321818488,
+                "syn_elbow_pt": 0.49260988987156973,
+                "syn_jsd": 0.4826237209294397
+            },
+            "rep4": {
+                "auc": 0.1748527072567171,
+                "syn_auc": 0.4918126430789531,
+                "x_intercept": 0.1948039223527718,
+                "syn_x_intercept": 2.9774206316468787e-127,
+                "elbow_pt": 0.733261615491054,
+                "syn_elbow_pt": 0.514628559014928,
+                "syn_jsd": 0.43674819793236114
+            }
+        }
+    }
+}

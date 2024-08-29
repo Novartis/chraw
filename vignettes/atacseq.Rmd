@@ -1,0 +1,131 @@
+---
+title: "Test of package with ATAC-Seq data"
+author: "Christian Kolter, Alejandro Reyes, Sebastian Steinhauser and Ricardo Rosa Junior"
+output: BiocStyle::html_document
+vignette: >
+    %\VignetteIndexEntry{Test of package with ATAC-Seq data}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+To analyze ATAC-Seq data, we take as an example the dataset from [GSE107023]{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE107023}.
+The samples are separated in Control and KO of TRPS1 gene in breast cancer cells and are paired-ended samples, allowing for deeper analysis with the package.
+
+*NOTE*
+
+This vignette is using reduced data from bam and bigwig files, for the sake of demonstrating the functionalities of the package and might not contain all biological signal in the data.
+
+```{r}
+library(chraw)
+library(BiocParallel)
+library(ggplot2)
+
+data("ce_atac")
+
+#The function "rewrite_paths" is used only for generating the example dataset of the vignette.
+#Users shouldn't use it with their own data.
+ce_atac <- rewrite_paths(ce_atac)
+
+#Create columns for this analysis
+metaDat <- t(data.frame(strsplit(colData(ce_atac)$condition, "_|\\+")))
+rownames(metaDat) <- NULL
+metaDat <- as.data.frame(metaDat)
+colnames(metaDat) <- c("target", "condition")
+colData(ce_atac) <- cbind(colData(ce_atac), DataFrame( metaDat ))
+colData(ce_atac)$sample_alias <- colData(ce_atac)$sampleName
+colData(ce_atac)$condition <- c("CTRL","CTRL","KO","KO")
+colData(ce_atac)
+```
+# Quality control
+```{r}
+plotMappingStats( ce_atac ) +
+  theme(axis.text.x=element_text(angle=35, hjust=1, vjust=1))
+ 
+plotPCRDuplicateStats(ce_atac) +
+  theme(axis.text.x=element_text(angle=35, hjust=1, vjust=1))
+
+indexBam(ce_atac)
+
+ce_atac <- addFragmentLengthDist(
+  ce_atac,
+  param=csaw::readParam(pe = "both", restrict="chr8"),
+  BPPARAM=MulticoreParam(2))
+
+plotFragmentLengthDist( ce_atac ) +
+  coord_cartesian(xlim=c(0, 450))
+```
+
+# Analyze peaks
+
+```{r, warning=FALSE}
+Samples <- ce_atac$sampleName
+Peaks <- importNarrowPeaks( ce_atac,
+                            includeSamples=Samples, merge=TRUE )
+mergedPeaksLarge <- resize(Peaks, 2000, fix="center")
+mergedPeaksLarge <- mergedPeaksLarge[seqnames(mergedPeaksLarge) == 'chr8' & start(mergedPeaksLarge) >= 115000152 & end(mergedPeaksLarge) <= 115999730]
+names(Peaks) <- sprintf("Peak%0.5d", seq_len(length(Peaks)))
+
+plotMetaProfileHeatmaps(
+  ce_atac, includeSamples=Samples,
+  mergedPeaksLarge, sampleLabelColumn="sample_alias", bin.num=100 )
+
+ce_atac <- addCountExperiment(
+  ce_atac, regions=Peaks,
+  includeSamples=Samples,
+  name="Peaks", BPPARAM=MulticoreParam(2))
+experiments(ce_atac)
+```
+We can visualize how samples correlate with each other:
+
+```{r}
+plotSampleCorrelations(
+  ce_atac, experimentName="Peaks",
+  annotationColumns="condition",
+  sampleLabelColumn="sample_alias" )
+
+plotPCA( ce_atac, experimentName="Peaks",
+         colourGrouping="condition",
+         transformation=asinh )
+```
+
+# Differential Analysis
+
+```{r}
+ce_atac <- testForDiffSignal(
+  ce_atac, experimentName="Peaks",
+  design=~condition,
+  contrasts=list(koEffect=c("condition", "KO", "CTRL")))
+
+getDiffResultSummary(ce_atac)
+
+diffRes <- pullDiffResults(ce_atac, experimentName="Peaks", contrastName="koEffect")
+
+plotVolcano(ce_atac, experimentName="Peaks", contrastName="koEffect")
+
+plotMA(ce_atac, experimentName="Peaks", contrastName="koEffect")
+```
+
+# Annotate experiment regions
+
+```{r}
+ce_atac <- annotateExperimentRegions( ce_atac, "Peaks" ,download=FALSE)
+
+enrichRes <- enrichAnno( ce_atac, 'Peaks',
+                        'koEffect', 'simple_annotation',
+                        padjThres=0.2, log2FcThrs=0, foreground="down",
+                        background="all")
+
+#plotEnrichResults(enrichRes)
+
+```
+```{r}
+rowData(experiments(ce_atac)[[3]])
+```
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,157 @@
+---
+title: "Test of package with CHIP-Seq data"
+author: "Christian Kolter, Alejandro Reyes, Sebastian Steinhauser and Ricardo Rosa Junior"
+output: BiocStyle::html_document
+vignette: >
+    %\VignetteIndexEntry{Test of package with CHIP-Seq data}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+To analyze CHIP-Seq data, we take as an example the dataset from [GSE104060]{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE104060}.
+The samples are separated in Control for 3h and 27h and interaction with agonist of NR1I3 for 3 and 27h and are paired-ended samples, allowing for deeper analysis with the package.
+
+*NOTE*
+
+This vignette is using reduced data from bam and bigwig files, for the sake of demonstrating the functionalities of the package and might not contain all biological signal in the data.
+
+```{r}
+library(chraw)
+library(BiocParallel)
+library(ggplot2)
+
+data("ce_chipseq")
+
+#The function "rewrite_paths" is used only for generating the example dataset of the vignette.
+#Users shouldn't use it with their own data.
+ce_chipseq <- rewrite_paths(ce_chipseq)
+
+#Create important columns for this analysis
+metaDat <- t(data.frame(strsplit(colData(ce_chipseq)$condition, "_|\\+")))
+rownames(metaDat) <- NULL
+metaDat <- as.data.frame(metaDat)
+colnames(metaDat) <- c("donor", "target", "condition")
+colData(ce_chipseq) <- cbind(colData(ce_chipseq), DataFrame( metaDat ))
+colData(ce_chipseq)$sample_alias <- colData(ce_chipseq)$sampleName
+colData(ce_chipseq)$condition <- c("CTRL_3h","CTRL_3h",
+                                   "CTRL_27h","CTRL_27h",
+                                   "agonist_3h","agonist_3h",
+                                   "agonist_27h","agonist_27h")
+colnames(colData(ce_chipseq))[10] <- "Time"
+ce_chipseq$sample_alias <- gsub("H3K27ac_NR1I3_","",ce_chipseq$sample_alias)
+colData(ce_chipseq)
+
+```
+# Quality Control
+```{r, fig.width=8, fig.height=5}
+plotPCRDuplicateStats( ce_chipseq ) +
+  theme(axis.text.x=element_text(angle=50, hjust=1, vjust=1))
+
+plotMappingStats( ce_chipseq ) +
+  theme(axis.text.x=element_text(angle=35, hjust=1, vjust=1))
+```
+
+## Metaprofiles
+
+We can visualize if there is any sample with a different treatment that shows a cleaner signal:
+```{r}
+#Subsetting only replicates 1 from each condition tested
+Samples <- rownames(colData(ce_chipseq))[c(1,3,5,7)]
+
+Peaks <- importNarrowPeaks( ce_chipseq, includeSamples = Samples,merge=TRUE )
+mergedPeaksLarge <- resize(Peaks, 2000, fix="center")
+mergedPeaksLarge <- mergedPeaksLarge[seqnames(mergedPeaksLarge) == 'chr6' & start(mergedPeaksLarge) >= 67090000 & end(mergedPeaksLarge) <= 67170000]
+names(Peaks) <- sprintf("Peak%0.5d", seq_len(length(Peaks)))
+
+plotMetaProfileHeatmaps(
+  ce_chipseq, includeSamples=Samples,
+  mergedPeaksLarge, sampleLabelColumn="sample_alias", bin.num=100 )
+```
+
+# Identifying peaks
+```{r, warning=FALSE,message=FALSE}
+Samples <- ce_chipseq$sampleName
+ce_chipseq <- addCountExperiment(
+  ce_chipseq, regions=Peaks,
+  includeSamples=Samples,
+  name="Peaks", BPPARAM=MulticoreParam(2))
+experiments(ce_chipseq)
+```
+We can visualize how samples correlate with each other:
+```{r, fig.width=9.5, fig.height=5.5}
+colors <- list("condition" = c("agonist_3h"="#881bce","CTRL_3h"="#24bda5","agonist_27h"="#0c1c58","CTRL_27h"="#1134b4"),
+               "Time"=c("3h"="#c98a16","27h"="#94650f"))
+
+plotSampleCorrelations(
+  ce_chipseq, experimentName="Peaks",
+  annotationColumns=c("condition","Time"),
+  annotationColors = colors,
+  sampleLabelColumn="sample_alias" )
+```
+```{r, fig.width=6, fig.height=6}
+plotPCA( ce_chipseq, experimentName="Peaks",
+         colourGrouping="condition",
+         transformation=asinh )
+```
+It is also possible to visualize the peaks in a Tracks plot:
+```{r}
+includeSamples <- Samples
+plottingRegion <- GRanges("chr6:67090000-67170000")
+covData <- importAndAverage( object = ce_chipseq, includeSamples = includeSamples, plottingRegion = plottingRegion )
+head(covData, n=5)
+```
+```{r, warning=FALSE}
+covData$replicate_group <- gsub("H3K27ac_NR1I3_","",covData$replicate_group)
+
+plotCovFromDF(covData=covData, replicate_group = "agonist_27h", plottingRegion = plottingRegion, cl="black")
+
+```
+
+# Differential testing
+For this example we will compare agonist vs CTRL for both 3 and 27 hours exposures:
+```{r}
+ce_chipseq <- testForDiffSignal(
+  ce_chipseq, experimentName="Peaks",
+  design=~condition,
+  contrasts=list(agonist_27h=c("condition", "agonist_27h", "CTRL_27h"),
+                 agonist_3h=c("condition", "agonist_3h","CTRL_3h")))
+```
+```{r, fig.width=8, fig.height=5, warning=FALSE}
+plotMA( ce_chipseq, experimentName="Peaks" )
+
+plotVolcano(ce_chipseq, experimentName="Peaks")
+```
+Save information for each comparison:
+```{r}
+diffRes3h <- pullDiffResults(ce_chipseq, experimentName="Peaks", contrastName="agonist_3h")
+diffRes27h <- pullDiffResults(ce_chipseq, experimentName="Peaks", contrastName="agonist_27h")
+```
+
+We can also test for differential signal between comparisons:
+```{r}
+ # Compare diff signal in all peaks for two different contrasts
+plotDiffScatter(object = ce_chipseq,
+                 contrasts =  c('agonist_3h', 'agonist_27h'),
+                 experimentNames = c('Peaks', 'Peaks'))
+```
+
+
+# Annotating genomic regions
+```{r}
+ce_chipseq <- annotateExperimentRegions( ce_chipseq, "Peaks",download=FALSE)
+
+enrichRes <- enrichAnno( ce_chipseq, 'Peaks',
+                         'agonist_3h', 'simple_annotation',
+                         padjThres=0.2, log2FcThrs=0, foreground="down",
+                         background="all")
+
+#plotEnrichResults(enrichRes)
+```
+
+```{r}
+sessionInfo()
+```

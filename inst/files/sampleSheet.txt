@@ -1,0 +1,4 @@
+sampleName	bamFile	bigwigFile	peakFile	qcFile	condition
+rat_ts_h3k4me1_1	inst/files/rat/bam/rat_h3k4me1_1.bam	inst/files/rat/bigwig/rat_h3k4me1_1.bigwig	inst/files/rat/peaks/rat_h3k4me1_1.narrowPeak.gz	inst/files/rat/qc/h3k4me1/h3k4me1.qc.json	h3k4me1
+rat_ts_h3k27me3_1	inst/files/rat/bam/rat_h3k27me3_1.bam	inst/files/rat/bigwig/rat_h3k27me3_1.bigwig	inst/files/rat/peaks/rat_h3k27me3_1.narrowPeak.gz	inst/files/rat/qc/h3k27me3/h3k27me3.qc.json	h3k27me3
+rat_ts_input_1	inst/files/rat/bam/rat_input_1.bam	inst/files/rat/bigwig/rat_input_1.bigwig	inst/files/rat/peaks/rat_input_1.narrowPeak.gz	inst/files/rat/qc/input/input.qc.json	input

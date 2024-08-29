@@ -1,0 +1,30 @@
+Package: chraw
+Title: Analysis of chromatin and multi-omics datasets
+Version: 1.0.0
+Authors@R: 
+    person("Sebastian", "Steinhauser", email = "sebastian.steinhauser@novartis.com", role = "aut")
+    person("Christian", "Kolter", email = "christian.kolter@novartis.com", role = "aut")
+    person("Ricardo","Rosa Junior", email="ricardo.rosa@hc.fm.usp.br", role = "aut")
+    person("Alejandro", "Reyes", email = "alejandro.reyes_quiroz@novartis.com", role = c("aut", "cre"))
+Description: The package analyzes chromatin and multi-omic experiments. 
+    It extends the MultiAssayExperiment object and builds a ChrawExperiment object from ENCODE’s output. 
+    It performs QC plotting, identifies differential events and other functionalities. 
+    More details in package vignettes.
+Suggests: 
+    testthat (>= 3.0.0), magick, knitr, BiocStyle, rmarkdown, AnnotationHub, BSgenome.Hsapiens.UCSC.hg38, 
+    TxDb.Hsapiens.UCSC.hg38.refGene, org.Hs.eg.db, org.Mm.eg.db, TxDb.Mmusculus.UCSC.mm10.knownGene,
+    BSgenome.Mmusculus.UCSC.mm10, BSgenome.Rnorvegicus.UCSC.rn6, org.Rn.eg.db, TxDb.Rnorvegicus.UCSC.rn6.refGene
+Imports: Rsamtools, GenomicRanges, AnnotationDbi,
+    BiocGenerics, BiocParallel, BSgenome, ChIPpeakAnno, rlang,
+    ChIPseeker, circlize, ComplexHeatmap, cowplot, csaw,
+    DESeq2, genomation, GenomicFeatures, ggplot2, IRanges,
+    jsonlite, magrittr, matrixStats, random, methods, ensembldb,
+    Rsubread, rtracklayer, S4Vectors, GenomicAlignments, txdbmaker
+VignetteBuilder: knitr
+Depends: MultiAssayExperiment
+License: MIT + file LICENSE
+LazyData: true
+LazyDataCompression: xz
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1

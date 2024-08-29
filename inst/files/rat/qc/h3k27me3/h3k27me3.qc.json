@@ -1,0 +1,111 @@
+{
+    "general": {
+        "date": "2024-07-29 11:27:13",
+        "title": "rat_ts_h3k27me3",
+        "description": "rat_ts_h3k27me3GSE42207 chip-seq data",
+        "pipeline_ver": "v2.1.2",
+        "pipeline_type": "tf",
+        "genome": "rn6",
+        "aligner": "bowtie2",
+        "seq_endedness": {
+            "rep1": {
+                "paired_end": true
+            }
+        },
+        "peak_caller": "spp"
+    },
+    "align": {
+        "samstat": {
+            "rep1": {
+                "total_reads": 43585150,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 27057796,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 62.1,
+                "paired_reads": 43585150,
+                "paired_reads_qc_failed": 0,
+                "read1": 21792575,
+                "read1_qc_failed": 0,
+                "read2": 21792575,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 23583938,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 54.1,
+                "with_itself": 24704864,
+                "with_itself_qc_failed": 0,
+                "singletons": 2352932,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 5.4,
+                "diff_chroms": 669965,
+                "diff_chroms_qc_failed": 0
+            }
+        },
+        "dup": {
+            "rep1": {
+                "unpaired_reads": 0,
+                "paired_reads": 6414191,
+                "unmapped_reads": 0,
+                "unpaired_duplicate_reads": 0,
+                "paired_duplicate_reads": 459766,
+                "paired_optical_duplicate_reads": 0,
+                "pct_duplicate_reads": 7.1679
+            }
+        },
+        "nodup_samstat": {
+            "rep1": {
+                "total_reads": 11908850,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 11908850,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 100.0,
+                "paired_reads": 11908850,
+                "paired_reads_qc_failed": 0,
+                "read1": 5954425,
+                "read1_qc_failed": 0,
+                "read2": 5954425,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 11908850,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 100.0,
+                "with_itself": 11908850,
+                "with_itself_qc_failed": 0,
+                "singletons": 0,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.0,
+                "diff_chroms": 0,
+                "diff_chroms_qc_failed": 0
+            }
+        }
+    },
+    "lib_complexity": {
+        "lib_complexity": {
+            "rep1": {
+                "total_fragments": 6414025,
+                "distinct_fragments": 5954292,
+                "positions_with_one_read": 393198,
+                "NRF": 0.928324,
+                "PBC1": 0.928628,
+                "PBC2": 14.062439
+            }
+        }
+    },
+    "align_enrich": {
+        "xcor_score": {
+            "rep1": {
+                "subsampled_reads": 11135703,
+                "estimated_fragment_len": 225,
+                "corr_estimated_fragment_len": 0.133825265927496,
+                "phantom_peak": 50,
+                "corr_phantom_peak": 0.1253858,
+                "argmin_corr": 1500,
+                "min_corr": 0.1217875,
+                "NSC": 1.098842,
+                "RSC": 3.345436
+            }
+        }
+    }
+}

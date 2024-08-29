@@ -1,0 +1,19 @@
+STATE NO	chromHmmLabs	COLOR NAME	COLOR CODE	simpleColor	simpleLabs
+1	Tss	Red	255,0,0	255,0,0	Promoter_active
+2	TssFlnk	Orange Red	255,69,0	255,69,0	Promoter_flanking
+3	Tx	Green	0,128,0	0,128,0	Transcription
+4	TxWk	Green	0,128,0	0,128,0	Transcription
+5	Enh	Orange	255,195,77	255,195,77	Enhancer
+6	EnhG	Orange	255,195,77	255,195,77	Enhancer
+7	EnhLo	Orange	255,195,77	255,195,77	Enhancer
+8	EnhPois	DarkKhaki	189,183,107	189,183,107	Enhancer_bivalent
+9	EnhPr	DarkKhaki	189,183,107	189,183,107	Enhancer_primed
+10	TssBiv	IndianRed	205,92,92	205,92,92	Promoter_bivalent
+11	ReprPC	Gainsboro	192,192,192	192,192,192	Repressed PolyComb
+12	ReprPCWk	Gainsboro	192,192,192	192,192,192	Repressed PolyComb
+13	Quies	Silver	128,128,128	128,128,128	Quiescent
+14	Quies2	Silver	128,128,128	128,128,128	Quiescent
+15	Quies3	Silver	128,128,128	128,128,128	Quiescent
+16	Quies4	Silver	128,128,128	128,128,128	Quiescent
+17	QuiesG	Silver	128,128,128	128,128,128	Quiescent
+18	Het	PaleTurquoise	138,145,208	138,145,208	Heterochromatin

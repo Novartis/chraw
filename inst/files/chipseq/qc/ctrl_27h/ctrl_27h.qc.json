@@ -1,0 +1,302 @@
+{
+    "general": {
+        "date": "2021-08-25 16:09:36",
+        "title": "H3K27ac_NR1I3_CTRL_27h",
+        "description": "H3K27ac_NR1I3_CTRL_27hGSE104060_liver_nr1i3_agonist",
+        "pipeline_ver": "v1.7.1",
+        "pipeline_type": "tf",
+        "genome": "mm10",
+        "aligner": "bowtie2",
+        "seq_endedness": {
+            "rep1": {
+                "paired_end": true
+            },
+            "rep2": {
+                "paired_end": true
+            },
+            "rep3": {
+                "paired_end": true
+            }
+        },
+        "peak_caller": "spp"
+    },
+    "align": {
+        "samstat": {
+            "rep1": {
+                "total_reads": 43887744,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 42848062,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 97.6,
+                "paired_reads": 43887744,
+                "paired_reads_qc_failed": 0,
+                "read1": 21943872,
+                "read1_qc_failed": 0,
+                "read2": 21943872,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 42446752,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 96.7,
+                "with_itself": 42572202,
+                "with_itself_qc_failed": 0,
+                "singletons": 275860,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.6,
+                "diff_chroms": 54341,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep2": {
+                "total_reads": 42774464,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 41615471,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 97.3,
+                "paired_reads": 42774464,
+                "paired_reads_qc_failed": 0,
+                "read1": 21387232,
+                "read1_qc_failed": 0,
+                "read2": 21387232,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 41064888,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 96.0,
+                "with_itself": 41271874,
+                "with_itself_qc_failed": 0,
+                "singletons": 343597,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.8,
+                "diff_chroms": 113198,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep3": {
+                "total_reads": 35948368,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 34866179,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 97.0,
+                "paired_reads": 35948368,
+                "paired_reads_qc_failed": 0,
+                "read1": 17974184,
+                "read1_qc_failed": 0,
+                "read2": 17974184,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 34386720,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 95.7,
+                "with_itself": 34575812,
+                "with_itself_qc_failed": 0,
+                "singletons": 290367,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.8,
+                "diff_chroms": 107830,
+                "diff_chroms_qc_failed": 0
+            }
+        },
+        "dup": {
+            "rep1": {
+                "unpaired_reads": 0,
+                "paired_reads": 18695323,
+                "unmapped_reads": 0,
+                "unpaired_duplicate_reads": 0,
+                "paired_duplicate_reads": 318859,
+                "paired_optical_duplicate_reads": 0,
+                "pct_duplicate_reads": 1.7056000000000002
+            },
+            "rep2": {
+                "unpaired_reads": 0,
+                "paired_reads": 17911174,
+                "unmapped_reads": 0,
+                "unpaired_duplicate_reads": 0,
+                "paired_duplicate_reads": 303236,
+                "paired_optical_duplicate_reads": 0,
+                "pct_duplicate_reads": 1.693
+            },
+            "rep3": {
+                "unpaired_reads": 0,
+                "paired_reads": 15072481,
+                "unmapped_reads": 0,
+                "unpaired_duplicate_reads": 0,
+                "paired_duplicate_reads": 277348,
+                "paired_optical_duplicate_reads": 0,
+                "pct_duplicate_reads": 1.8401
+            }
+        },
+        "nodup_samstat": {
+            "rep1": {
+                "total_reads": 36752928,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 36752928,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 100.0,
+                "paired_reads": 36752928,
+                "paired_reads_qc_failed": 0,
+                "read1": 18376464,
+                "read1_qc_failed": 0,
+                "read2": 18376464,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 36752928,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 100.0,
+                "with_itself": 36752928,
+                "with_itself_qc_failed": 0,
+                "singletons": 0,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.0,
+                "diff_chroms": 0,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep2": {
+                "total_reads": 35215876,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 35215876,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 100.0,
+                "paired_reads": 35215876,
+                "paired_reads_qc_failed": 0,
+                "read1": 17607938,
+                "read1_qc_failed": 0,
+                "read2": 17607938,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 35215876,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 100.0,
+                "with_itself": 35215876,
+                "with_itself_qc_failed": 0,
+                "singletons": 0,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.0,
+                "diff_chroms": 0,
+                "diff_chroms_qc_failed": 0
+            },
+            "rep3": {
+                "total_reads": 29590266,
+                "total_reads_qc_failed": 0,
+                "duplicate_reads": 0,
+                "duplicate_reads_qc_failed": 0,
+                "mapped_reads": 29590266,
+                "mapped_reads_qc_failed": 0,
+                "pct_mapped_reads": 100.0,
+                "paired_reads": 29590266,
+                "paired_reads_qc_failed": 0,
+                "read1": 14795133,
+                "read1_qc_failed": 0,
+                "read2": 14795133,
+                "read2_qc_failed": 0,
+                "properly_paired_reads": 29590266,
+                "properly_paired_reads_qc_failed": 0,
+                "pct_properly_paired_reads": 100.0,
+                "with_itself": 29590266,
+                "with_itself_qc_failed": 0,
+                "singletons": 0,
+                "singletons_qc_failed": 0,
+                "pct_singletons": 0.0,
+                "diff_chroms": 0,
+                "diff_chroms_qc_failed": 0
+            }
+        }
+    },
+    "lib_complexity": {
+        "lib_complexity": {
+            "rep1": {
+                "total_fragments": 18694387,
+                "distinct_fragments": 18375539,
+                "positions_with_one_read": 309331,
+                "NRF": 0.982944,
+                "PBC1": 0.982914,
+                "PBC2": 58.389133
+            },
+            "rep2": {
+                "total_fragments": 17910571,
+                "distinct_fragments": 17607343,
+                "positions_with_one_read": 293811,
+                "NRF": 0.98307,
+                "PBC1": 0.983056,
+                "PBC2": 58.912063
+            },
+            "rep3": {
+                "total_fragments": 15071872,
+                "distinct_fragments": 14794537,
+                "positions_with_one_read": 268481,
+                "NRF": 0.981599,
+                "PBC1": 0.981561,
+                "PBC2": 54.08852
+            }
+        }
+    },
+    "align_enrich": {
+        "xcor_score": {
+            "rep1": {
+                "subsampled_reads": 15000000,
+                "estimated_fragment_len": 175,
+                "corr_estimated_fragment_len": 0.28329535104443,
+                "phantom_peak": 55,
+                "corr_phantom_peak": 0.2548024,
+                "argmin_corr": 1500,
+                "min_corr": 0.2131755,
+                "NSC": 1.32893,
+                "RSC": 1.684483
+            },
+            "rep2": {
+                "subsampled_reads": 15000000,
+                "estimated_fragment_len": 180,
+                "corr_estimated_fragment_len": 0.334782571878774,
+                "phantom_peak": 55,
+                "corr_phantom_peak": 0.2785346,
+                "argmin_corr": 1500,
+                "min_corr": 0.2072449,
+                "NSC": 1.615396,
+                "RSC": 1.789007
+            },
+            "rep3": {
+                "subsampled_reads": 14893751,
+                "estimated_fragment_len": 180,
+                "corr_estimated_fragment_len": 0.321889649116574,
+                "phantom_peak": 55,
+                "corr_phantom_peak": 0.2700267,
+                "argmin_corr": 1500,
+                "min_corr": 0.2038547,
+                "NSC": 1.579015,
+                "RSC": 1.78376
+            }
+        },
+        "jsd": {
+            "rep1": {
+                "auc": 0.16227876146540537,
+                "syn_auc": 0.4922791190286511,
+                "x_intercept": 0.19508898220355927,
+                "syn_x_intercept": 2.979083960150911e-143,
+                "elbow_pt": 0.7660227954409118,
+                "syn_elbow_pt": 0.49289460559671117,
+                "syn_jsd": 0.46242495574461423
+            },
+            "rep2": {
+                "auc": 0.14273265669585575,
+                "syn_auc": 0.49210229612624745,
+                "x_intercept": 0.2230993801239752,
+                "syn_x_intercept": 7.421653531302507e-137,
+                "elbow_pt": 0.7933993201359728,
+                "syn_elbow_pt": 0.5100000879244553,
+                "syn_jsd": 0.49457128056724137
+            },
+            "rep3": {
+                "auc": 0.14295441695301822,
+                "syn_auc": 0.4913777178950525,
+                "x_intercept": 0.25116576684663067,
+                "syn_x_intercept": 1.2991630400999571e-114,
+                "elbow_pt": 0.7762747450509898,
+                "syn_elbow_pt": 0.4960914126184308,
+                "syn_jsd": 0.4794550192511229
+            }
+        }
+    }
+}
