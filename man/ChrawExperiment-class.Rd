@@ -4,8 +4,33 @@
 \name{ChrawExperiment-class}
 \alias{ChrawExperiment-class}
 \title{ChrawExperiment class}
+\value{
+An object of class \code{ChrawExperiment}. Objects are built with
+\code{\link[=ChrawExperimentFromDataFrame]{ChrawExperimentFromDataFrame()}} or \code{\link[=ChrawExperimentFromSampleFile]{ChrawExperimentFromSampleFile()}}
+rather than by calling \code{new()} directly.
+}
 \description{
 This class is an extension of the MultiAssayExperiment class,
 containing also information on the reference genome from the experiment
 and the pipeline used to create the experiments stored in the objects.
+}
+\section{Slots}{
+
+\describe{
+\item{\code{referenceGenome}}{A character vector of length 1 with the reference
+genome assembly that the experiments were aligned to. One of \code{"hg38"},
+\code{"hg19"}, \code{"mm10"}, \code{"mm9"}, \code{"rn6"} or \code{"canFam3"}.}
+
+\item{\code{pipeline}}{A character vector of length 1 with the pipeline that
+produced the experiments. One of \code{"public"}, \code{"chromatinalign"},
+\code{"chip-seq"} or \code{"atac-seq"}.}
+}}
+
+\examples{
+data(ce_examples)
+ce_examples
+
+}
+\seealso{
+\code{\link[=referenceGenome]{referenceGenome()}} and \code{pipeline()} for the metadata accessors.
 }

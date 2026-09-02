@@ -30,8 +30,21 @@ ce_examples
 
 chromHMMDict
 }
+\value{
+\code{ce_atac}, \code{ce_chipseq}, \code{ce_rat} and \code{ce_examples} are
+ChrawExperiment objects; \code{chromHMMDict} is a data frame mapping the
+ChromHMM state names to simplified labels.
+}
 \description{
 ChrawExperiment example objects used throughout the vignette.
+}
+\examples{
+data(ce_atac)
+ce_atac
+
+data(chromHMMDict)
+head(chromHMMDict)
+
 }
 \keyword{data}
 \keyword{datasets}

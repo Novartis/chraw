@@ -19,17 +19,27 @@
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{experimentName}{The name of the count experiment, normally added using the \code{addCountExperiment} function.}
+\item{experimentName}{The name of the count experiment, normally added
+using the \code{addCountExperiment} function.}
 
-\item{prinComps}{A numeric vector of length 2 that specifies the PC loadings to plot.}
+\item{prinComps}{A numeric vector of length 2 that specifies the PC
+loadings to plot.}
 
-\item{colourGrouping}{A variable name from the metadata to color the points. Must be a column of \code{colData(object)}.}
+\item{colourGrouping}{A variable name from the metadata to color the
+points. Must be a column of \code{colData(object)}.}
 
-\item{includeSamples}{A character vector specifying which samples to include, these must be in \code{rownames(colData(object))}.}
+\item{includeSamples}{A character vector specifying which samples to
+include, these must be in \code{rownames(colData(object))}.}
 
-\item{transformation}{A function specifying a function to apply to the data. We recommend a variance-stabilizing transformation.}
+\item{transformation}{A function specifying a function to apply to the
+data. We recommend a variance-stabilizing transformation.}
 
-\item{ntop}{A numeric value indicating the number of top features to use for principal components, selected by highest variance.}
+\item{ntop}{A numeric value indicating the number of top features to use
+for principal components, selected by highest variance.}
+}
+\value{
+A \code{ggplot} object with the samples projected on the requested
+principal components.
 }
 \description{
 These functions document the S4 method plotPCA for

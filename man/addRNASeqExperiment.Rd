@@ -4,7 +4,7 @@
 \alias{addRNASeqExperiment}
 \title{Add an RNA-seq experiment to a ChrawExperiment object}
 \usage{
-addRNASeqExperiment(object, se, name = NULL, identifierType = "ENSEMBL")
+addRNASeqExperiment(object, se, name, identifierType = "ENSEMBL")
 }
 \arguments{
 \item{object}{A ChrawExperiment object.}
@@ -13,7 +13,8 @@ addRNASeqExperiment(object, se, name = NULL, identifierType = "ENSEMBL")
 
 \item{name}{A string specifying the name of the new experiment.}
 
-\item{identifierType}{A character string specifying the identifier type. Can be 'ENSEMBL', 'ENTREZID' or 'SYMBOL'.}
+\item{identifierType}{A character string specifying the identifier type.
+Can be 'ENSEMBL', 'ENTREZID' or 'SYMBOL'.}
 }
 \value{
 A ChrawExperiment object with an RNA-seq experiment added.
@@ -25,4 +26,23 @@ containing RNA-seq count data. The function integrates the
 RNA-seq count data into the ChrawExperiment container. It also
 maps ENTREZ, ENSEMBL and SYMBOL identifiers to enable
 integration with the chromatin datasets.
+}
+\examples{
+data(ce_examples)
+ce_examples <- rewrite_paths(ce_examples)
+
+## A minimal RNA-seq experiment keyed by ENSEMBL gene identifiers
+genes <- GenomicRanges::GRanges(
+    "chr6", IRanges::IRanges(c(67100000, 67120000), width = 1000))
+names(genes) <- c("ENSMUSG00000000001", "ENSMUSG00000000003")
+counts <- matrix(1:16, nrow = 2,
+                 dimnames = list(names(genes),
+                                 colnames(ce_examples[["Peaks"]])))
+rnaSE <- SummarizedExperiment::SummarizedExperiment(
+    assays = list(counts = counts), rowRanges = genes)
+
+\donttest{
+ce_examples <- addRNASeqExperiment( ce_examples, rnaSE, name = "RNA" )
+}
+
 }

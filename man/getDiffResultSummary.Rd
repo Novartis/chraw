@@ -2,7 +2,8 @@
 % Please edit documentation in R/functions_diff.R
 \name{getDiffResultSummary}
 \alias{getDiffResultSummary}
-\title{Returns all the results of diffential analyses stored in a ChrawExperiment object.}
+\title{Returns all the results of diffential analyses stored in a ChrawExperiment
+object.}
 \usage{
 getDiffResultSummary(object)
 }
@@ -10,11 +11,22 @@ getDiffResultSummary(object)
 \item{object}{A ChrawExperiment object.}
 }
 \value{
-A \code{data.frame()} summarizing the ChrawExperiment object that include the results of the differential analysis.
+A \code{data.frame()} summarizing the ChrawExperiment object that
+include the results of the differential analysis.
 }
 \description{
-This function loops over the \code{experiments()} that were added using the
-\code{addCountData()} function to the ChrawExperiment object, to look for results of
-differential testing generated using the \code{testForDiffSignal()}. It returns a
-\code{data.frame()} that summarizes the results stored in the ChrawExperiment object.
+This function loops over the \code{experiments()} that were added
+using the
+\code{addCountData()} function to the ChrawExperiment object, to look for
+results of
+differential testing generated using the \code{testForDiffSignal()}. It returns
+a
+\code{data.frame()} that summarizes the results stored in the ChrawExperiment
+object.
+}
+\examples{
+data(ce_examples)
+
+getDiffResultSummary( ce_examples )
+
 }

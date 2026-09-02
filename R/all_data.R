@@ -7,6 +7,17 @@
 #'
 #' @format ChrawExperiment objects
 #'
+#' @return `ce_atac`, `ce_chipseq`, `ce_rat` and `ce_examples` are
+#' ChrawExperiment objects; `chromHMMDict` is a data frame mapping the
+#' ChromHMM state names to simplified labels.
+#'
+#' @examples
+#' data(ce_atac)
+#' ce_atac
+#'
+#' data(chromHMMDict)
+#' head(chromHMMDict)
+#'
 "ce_chipseq"
 
 #' @name ce_atac

@@ -11,13 +11,15 @@ ChrawExperimentFromSampleFile(sampleFile, genome, minimalMetadata = TRUE)
 
 \item{genome}{Reference genome can be: mm9, mm10, hg19, hg38, rn6.}
 
-\item{minimalMetadata}{Logical, indicating whether all metadata from the sample sheet file should be kept or only a set of essential columns.}
+\item{minimalMetadata}{Logical, indicating whether all metadata from the
+sample sheet file should be kept or only a set of essential columns.}
 }
 \value{
 A ChrawExperiment object.
 }
 \description{
-This function builds a ChrawExperiment object from a pre-define
+This function builds a ChrawExperiment object from a
+pre-define
 sample sheet containing following information:
 \enumerate{
 \item sampleName - Sample names.
@@ -32,7 +34,19 @@ downstream analyses.
 }
 }
 \examples{
-#sampleFile <- system.file("files", "sampleSheet.txt", package="chraw", mustWork=TRUE)
-#ce <- ChrawExperimentFromSampleFile( sampleFile , genome = 'rn6')
+sampleFile <- system.file("files", "sampleSheet.txt", package="chraw",
+                         mustWork=TRUE)
+sampleDF <- as.data.frame(read.csv(sampleFile, sep = "\t", header=TRUE))
+
+inst_dir <- system.file("files/", package="chraw")
+sampleDF$bamFile <- gsub("inst/files", inst_dir, sampleDF$bamFile)
+sampleDF$bigwigFile <- gsub("inst/files", inst_dir, sampleDF$bigwigFile)
+sampleDF$peakFile <- gsub("inst/files", inst_dir, sampleDF$peakFile)
+sampleDF$qcFile <- gsub("inst/files", inst_dir, sampleDF$qcFile)
+
+tmpSheet <- tempfile(fileext = ".txt")
+write.table(sampleDF, tmpSheet, sep = "\t", quote = FALSE, row.names = FALSE)
+
+ce <- ChrawExperimentFromSampleFile( tmpSheet, genome = 'rn6')
 
 }

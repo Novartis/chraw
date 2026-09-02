@@ -14,7 +14,8 @@ addFragmentLengthDist(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{maxFragLength}{A numeric value specifying the maximum fragment length to consider.}
+\item{maxFragLength}{A numeric value specifying the maximum fragment
+length to consider.}
 
 \item{BPPARAM}{A BiocParallel instance for parallelization.}
 
@@ -27,4 +28,15 @@ ChrawExperiment object with "FragLengthDist" experiment
 This function calculates the length distribution
 of the sequenced fragments and adds these information as an experiment
 to the ChrawExperiment object.
+}
+\examples{
+data(ce_chipseq)
+ce_chipseq <- rewrite_paths(ce_chipseq)
+indexBam( ce_chipseq )
+
+ce_chipseq <- addFragmentLengthDist(
+    ce_chipseq,
+    param = csaw::readParam(pe = "both", restrict = "chr6") )
+experiments( ce_chipseq )
+
 }

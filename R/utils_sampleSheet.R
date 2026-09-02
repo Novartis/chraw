@@ -10,7 +10,7 @@ readAndValidateSampleSheet <- function( x, minimalMetadata=TRUE ){
     if( !all( colFlag ) ){
         stop(sprintf(paste("At least one of the following required columns",
                            "are missing from the sample sheet file: %s\n\t"),
-                     paste(requiredColumns[!colFlag], sep="\n\t")))
+                     paste(requiredColumns[!colFlag], collapse="\n\t")))
     }
     ## nest rows with the same sample names, i.e. technical replicates
     if( any( duplicated( sampleData$sampleName ) ) ){
@@ -32,7 +32,7 @@ readAndValidateDataFrame <- function(x, minimalMetadata=TRUE){
   if( !all( colFlag ) ){
     stop(sprintf(paste("At least one of the following required columns",
                        "are missing from the sample sheet file: %s\n\t"),
-                 paste(requiredColumns[!colFlag], sep="\n\t")))
+                 paste(requiredColumns[!colFlag], collapse="\n\t")))
   }
   ## nest rows with the same sample names, i.e. technical replicates
   if( any( duplicated( sampleData$sampleName ) ) ){

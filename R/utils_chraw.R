@@ -21,8 +21,10 @@ indexCromwellBams <- function( files, dedup=FALSE, BPPARAM=SerialParam(), force=
 
 #' Index the bam files from a ChrawExperiment object
 #'
-#' This function defines the S4 method indexBam for the object ChrawExperiment.
-#' This method locates the bam file of a ChrawExperiment and creates the indexes
+#' This function defines the S4 method indexBam for the object
+#'   ChrawExperiment.
+#' This method locates the bam file of a ChrawExperiment and creates the
+#'   indexes
 #' for the bam files that are not indexed.
 #'
 #' @docType methods
@@ -31,12 +33,23 @@ indexCromwellBams <- function( files, dedup=FALSE, BPPARAM=SerialParam(), force=
 #' @aliases indexBam indexBam,ChrawExperiment-method
 #'
 #' @param files A ChrawExperiment object.
-#' @param dedup Logical indicating whether to index the deduplicated bam files or the full bam files.
+#' @param dedup Logical indicating whether to index the deduplicated bam
+#'   files or the full bam files.
 #' @param BPPARAM A BiocParallel instance.
-#' @param force Logical indicating whether indexes should be re-created in case they exist.
+#' @param force Logical indicating whether indexes should be re-created in
+#'   case they exist.
 #'
 #' @import BiocParallel
 #' @import Rsamtools
+#' @return Invisibly returns `NULL`. Called for the side effect of
+#' writing a `.bai` index next to each bam file that lacks one.
+#'
+#' @examples
+#' data(ce_chipseq)
+#' ce_chipseq <- rewrite_paths(ce_chipseq)
+#' 
+#' indexBam( ce_chipseq )
+#'
 #' @importMethodsFrom Rsamtools indexBam
 #' @export
 setMethod( "indexBam", signature(files="ChrawExperiment"), indexCromwellBams )
@@ -73,11 +86,22 @@ getGenomicBins.ChrawExperiment <- function( object, binSize, onlyStandardChromos
 #' @docType methods
 #' @name getGenomicBins
 #' @rdname getGenomicBins
-#' @aliases getGenomicBins getGenomicBins,BSgenome-method getGenomicBins,ChrawExperiment-method
+#' @aliases getGenomicBins getGenomicBins,BSgenome-method
+#'   getGenomicBins,ChrawExperiment-method
 #'
 #' @param object A BSgenome object or a ChrawExperiment object
 #' @param binSize A numeric value specifying the size of the bins desired.
-#' @param onlyStandardChromosomes Logical indicating whether to keep only standard chromosomes. If 'FALSE' chromosome patches and haplotypes are dropped, as well as the mitochrondrial and 'Y' chromosomes.
+#' @param onlyStandardChromosomes Logical indicating whether to keep only
+#'   standard chromosomes. If 'FALSE' chromosome patches and haplotypes are
+#'   dropped, as well as the mitochrondrial and 'Y' chromosomes.
+#'
+#' @return A [GenomicRanges::GRanges] object with the genomic bins.
+#'
+#' @examples
+#' data(ce_examples)
+#' ce_examples <- rewrite_paths(ce_examples)
+#' 
+#' bins <- getGenomicBins( ce_examples, binSize = 10^6 )
 #'
 #' @import GenomicRanges
 #' @export
@@ -93,6 +117,16 @@ setMethod( getGenomicBins, signature( object = "ChrawExperiment" ), getGenomicBi
 #'
 #' @param bam A character string specifying the file paths to bam file.
 #' @param ... Additional parameters passed to `getPESizes()`.
+#'
+#' @examples
+#' data(ce_chipseq)
+#' ce_chipseq <- rewrite_paths(ce_chipseq)
+#' indexBam( ce_chipseq )
+#' 
+#' fragLengths <- computeFragLengthDist(
+#'     colData(ce_chipseq)$bamFile[1],
+#'     param = csaw::readParam(pe = "both", restrict = "chr6") )
+#' head( fragLengths )
 #'
 #' @importFrom csaw getPESizes
 #'
@@ -122,51 +156,79 @@ setMethod(
     "c", c(x="ChrawExperiment"),
     function( x, ..., sampleMap = NULL, mapFrom = NULL) {
         args <- list(...)
-        ## print(length(args))
         if( length(args) == 1 ){
-            ## print("entro")
             input <- args[[1L]]
-            ## print(class(input))
             if( !is(input, "ChrawExperiment")){
                 return(callNextMethod(x, ..., sampleMap=sampleMap, mapFrom=mapFrom ))
             }
 
-            referenceGenome <- unique(c(x@referenceGenome, input@referenceGenome))
-            if( length( referenceGenome ) > 1 ){
+            refGenome <- unique(c(referenceGenome(x), referenceGenome(input)))
+            if( length( refGenome ) > 1 ){
                 stop("Merging 'ChrawExperiment' objects from different species is not supported")
             }
-            pipeline <- unique(c(x@pipeline, input@pipeline))
-            if( length( pipeline ) > 1 ){
+            pipe <- unique(c(pipeline(x), pipeline(input)))
+            if( length( pipe ) > 1 ){
                 warning("Merging 'ChrawExperiment' objects from different pipelines, QC functionality will be disabled")
-                pipeline <- "public"
+                pipe <- "public"
             }
 
-
-            existsMatrix <- cbind(experiments(x)[["ExistingSampleFlag"]], experiments(input)[["ExistingSampleFlag"]])
-            expNames1 <- names(experiments(x))
-            expNames2 <- names(experiments(input))
+            existsMatrix <- cbind(experiments(x)[["ExistingSampleFlag"]],
+                                  experiments(input)[["ExistingSampleFlag"]])
             tmpName1 <- as.vector(randomStrings(1, len=10))
             tmpName2 <- as.vector(randomStrings(1, len=10))
-            #experiments(x)[[tmpName1]] <- experiments(x)[["ExistingSampleFlag"]]
-            #experiments(input)[[tmpName2]] <- experiments(input)[["ExistingSampleFlag"]]
             x <- addExperiment( x, experiments(x)[["ExistingSampleFlag"]], tmpName1 )
             input <- addExperiment( input, experiments(input)[["ExistingSampleFlag"]], tmpName2 )
             suppressMessages(experiments(x)[["ExistingSampleFlag"]] <- NULL)
             suppressMessages(experiments(input)[["ExistingSampleFlag"]] <- NULL)
-            ##concatCe <- c(as(x, "MultiAssayExperiment", as(input, "MultiAssayExperiment")))
             concatCe <- callNextMethod(x, input)
             concatCe <- addExperiment( concatCe, existsMatrix, "ExistingSampleFlag" )
             suppressMessages(experiments(concatCe)[[tmpName1]] <- NULL)
             suppressMessages(experiments(concatCe)[[tmpName2]] <- NULL)
             cr <- new("ChrawExperiment",
                       concatCe,
-                      referenceGenome=referenceGenome,
-                      pipeline=pipeline )
+                      referenceGenome=refGenome,
+                      pipeline=pipe )
             return(cr)
         }else if( length(args) > 1 ){
-            for( i in seq_len(length(args)) ){
+            for( i in seq_along(args) ){
                 x <- c( x, args[[i]], sampleMap=sampleMap, mapFrom=mapFrom )
             }
             return(x)
         }
     })
+
+#' Accessors for the metadata of a ChrawExperiment object
+#'
+#' @description `referenceGenome()` returns the reference genome assembly that
+#' the experiments of a [ChrawExperiment-class] object were aligned to, and
+#' `pipeline()` returns the name of the pipeline that produced them. Both are
+#' recorded when the object is built and are used across the package to select
+#' the matching annotation resources.
+#'
+#' @docType methods
+#' @name referenceGenome
+#' @rdname referenceGenome
+#' @aliases referenceGenome referenceGenome,ChrawExperiment-method
+#' pipeline pipeline,ChrawExperiment-method
+#'
+#' @param x A ChrawExperiment object.
+#' @param object A ChrawExperiment object.
+#'
+#' @return A character vector of length 1 with the reference genome assembly
+#' (`referenceGenome()`) or the pipeline name (`pipeline()`).
+#'
+#' @examples
+#' data(ce_examples)
+#'
+#' referenceGenome( ce_examples )
+#' pipeline( ce_examples )
+#'
+#' @importFrom BSgenome referenceGenome
+#' @export
+setMethod( "referenceGenome", signature( x="ChrawExperiment" ),
+          function( x ) x@referenceGenome )
+
+#' @rdname referenceGenome
+#' @export
+setMethod( "pipeline", signature( object="ChrawExperiment" ),
+          function( object ) object@pipeline )

@@ -11,13 +11,15 @@ ChrawExperimentFromDataFrame(sampleDF, genome, minimalMetadata = TRUE)
 
 \item{genome}{Reference genome can be: mm9, mm10, hg19, hg38, rn6.}
 
-\item{minimalMetadata}{Logical, indicating whether all metadata from the sample sheet file should be kept or only a set of essential columns.}
+\item{minimalMetadata}{Logical, indicating whether all metadata from the
+sample sheet file should be kept or only a set of essential columns.}
 }
 \value{
 A ChrawExperiment object.
 }
 \description{
-This function builds a ChrawExperiment object from a pre-defined
+This function builds a ChrawExperiment object from a
+pre-defined
 dataframe containing following information:
 \enumerate{
 \item sampleName - Sample names.

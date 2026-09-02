@@ -23,17 +23,24 @@ plotVProfile(
 
 \item{windowSize}{Window size in bp, used for resizing the regions.}
 
-\item{returnMatrix}{Logical, indicating whether the vplot matrix should be returned instead of the plot.}
+\item{returnMatrix}{Logical, indicating whether the vplot matrix should be
+returned instead of the plot.}
 
-\item{sampleLabelColumn}{A character string with the column name of \code{colData(object)}. The values of this column will be used as sample labels.}
+\item{sampleLabelColumn}{A character string with the column name of
+\code{colData(object)}. The values of this column will be used as sample
+labels.}
 
-\item{includeSamples}{A character vector specifying which samples to include. These must be in \code{rownames(colData(object))}.}
+\item{includeSamples}{A character vector specifying which samples to
+include. These must be in \code{rownames(colData(object))}.}
 
 \item{BPPARAM}{A BiocParallel instance.}
 
-\item{zlim}{Numeric value between 0 and 1. Specifies the upper quantile value to be considered as maximum value in the color scale. Larger values in the heatmap are set to this max value (using pmin).}
+\item{zlim}{Numeric value between 0 and 1. Specifies the upper quantile
+value to be considered as maximum value in the color scale. Larger values
+in the heatmap are set to this max value (using pmin).}
 
-\item{rowScaled}{Logical flag, indicating whether each rows of the heatmaps should be standarized (z-scores) or not.}
+\item{rowScaled}{Logical flag, indicating whether each rows of the
+heatmaps should be standarized (z-scores) or not.}
 }
 \value{
 Either a long formatted matrix, or a ggplot object.
@@ -41,4 +48,14 @@ Either a long formatted matrix, or a ggplot object.
 \description{
 This function calculates the 'vplot' profile given a
 ChrawExperiment object and a set of genomic ranges.
+}
+\examples{
+data(ce_examples)
+ce_examples <- rewrite_paths(ce_examples)
+
+indexBam( ce_examples )
+
+regions <- rowRanges(ce_examples[["Peaks"]])
+vplot <- plotVProfile( ce_examples, regions = regions )
+
 }

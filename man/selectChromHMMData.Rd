@@ -2,21 +2,31 @@
 % Please edit documentation in R/utils_annotation.R
 \name{selectChromHMMData}
 \alias{selectChromHMMData}
-\title{Selects the corresponding TxDb package for a ChrawExperiment object}
+\title{Downloads the default ChromHMM annotation for a ChrawExperiment object}
 \usage{
 selectChromHMMData(x)
 }
 \arguments{
 \item{x}{A ChrawExperiment object.}
 }
+\value{
+A character string with the path to the cached ChromHMM file, or
+\code{NULL} if no default annotation is available for the reference genome of
+\code{x}.
+}
 \description{
-This function inputs a ChrawExperiment and returns
-the corresponding TxDb object for the experiment.
+This function inputs a ChrawExperiment and downloads the
+default ChromHMM segmentation that the ENCODE project distributes for the
+reference genome of the experiment. Downloads are cached with
+\link[BiocFileCache:BiocFileCache-class]{BiocFileCache::BiocFileCache}, so the file is retrieved only once.
 }
 \examples{
 data(ce_examples)
 ce_examples <- rewrite_paths(ce_examples)
 
+# Requires internet access the first time it is run.
+\donttest{
 chromhmm <- selectChromHMMData( ce_examples )
+}
 
 }

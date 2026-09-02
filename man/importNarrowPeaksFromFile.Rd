@@ -15,3 +15,11 @@ GRange object
 \description{
 Import peaks from *.narrowPeak file into GRange object
 }
+\examples{
+data(ce_examples)
+ce_examples <- rewrite_paths(ce_examples)
+
+peaks <- importNarrowPeaksFromFile( colData(ce_examples)$peakFile[1] )
+head( peaks )
+
+}

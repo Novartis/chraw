@@ -11,28 +11,29 @@ test_that("Functions work for other species", {
     expect_s4_class(getGenomicBins( ce_rat, binSize=10000 ), "GRanges")
 
     expect_s4_class( ce_rat, "ChrawExperiment" )
+    ## rn6 has no default ChromHMM annotation; the warning about that is only
+    ## raised when the download is actually requested.
     expect_warning(
-      ce_rat <- annotateExperimentRegions( ce_rat, "Peaks" ),
-        "No default ChromHMM data was found" )
+      selectChromHMMData( ce_rat ),
+      "No default ChromHMM data was found" )
+    ce_rat <- annotateExperimentRegions( ce_rat, "Peaks" )
     elementTypes <- elementMetadata(mcols(rowRanges(experiments(ce_rat)[["Peaks"]])))$type
     expect_true(all(c("Chraw2 annotation", "UCSC link") %in% elementTypes))
 
     xx <- require(TxDb.Rnorvegicus.UCSC.rn6.refGene)
     if( xx ){
-        proms <- keepStandardChromosomes(promoters(TxDb.Rnorvegicus.UCSC.rn6.refGene), pruning.mode="coarse")
+        proms <- GenomeInfoDb::keepStandardChromosomes(promoters(TxDb.Rnorvegicus.UCSC.rn6.refGene), pruning.mode="coarse")
         notUniqueProms <- proms
-        names(notUniqueProms) <- sprintf("prom%0.4d", seq_len(length(notUniqueProms)))
+        names(notUniqueProms) <- sprintf("prom%0.4d", seq_along(notUniqueProms))
         proms <- unique(proms[seqnames(proms) == "chr1"])
         proms <- head(proms, 1000)
-        names(proms) <- sprintf("prom%0.4d", seq_len(length(proms)))
+        names(proms) <- sprintf("prom%0.4d", seq_along(proms))
         expect_s4_class( ce_rat, "ChrawExperiment" )
         expect_s4_class(getGenomicBins( ce_rat, binSize=10000 ), "GRanges")
         expect_error(
             addCountExperiment( ce_rat, regions=notUniqueProms, name="perPeak2" ),
             "must be unique")
-        expect_warning(
-            ce_rat <- annotateExperimentRegions( ce_rat, "Peaks" ),
-            "No default ChromHMM")
+        ce_rat <- annotateExperimentRegions( ce_rat, "Peaks" )
         elementTypes <- elementMetadata(mcols(rowRanges(experiments(ce_rat)[["Peaks"]])))$type
         expect_true(all(c("Chraw2 annotation", "UCSC link") %in% elementTypes))
     }

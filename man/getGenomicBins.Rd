@@ -20,9 +20,21 @@ getGenomicBins(object, ...)
 
 \item{binSize}{A numeric value specifying the size of the bins desired.}
 
-\item{onlyStandardChromosomes}{Logical indicating whether to keep only standard chromosomes. If 'FALSE' chromosome patches and haplotypes are dropped, as well as the mitochrondrial and 'Y' chromosomes.}
+\item{onlyStandardChromosomes}{Logical indicating whether to keep only
+standard chromosomes. If 'FALSE' chromosome patches and haplotypes are
+dropped, as well as the mitochrondrial and 'Y' chromosomes.}
+}
+\value{
+A \link[GenomicRanges:GRanges-class]{GenomicRanges::GRanges} object with the genomic bins.
 }
 \description{
 This method inputs either a ChrawExperiment or a BSgenome and returns
 a GenomicRanges object with equally sized genomic bins across the genome.
+}
+\examples{
+data(ce_examples)
+ce_examples <- rewrite_paths(ce_examples)
+
+bins <- getGenomicBins( ce_examples, binSize = 10^6 )
+
 }

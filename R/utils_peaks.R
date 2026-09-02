@@ -47,14 +47,14 @@ readQcJson <- function( basepaths, pipeline, subDirName, qcFiles ){
 }
 
 readQcJsonFromCE <- function( ce ){
-  if( ce@pipeline == 'public' ){
+  if( pipeline( ce ) == 'public' ){
     qcFiles <- unique(colData(ce)$qcFile)
     names(qcFiles) <- unique(colData(ce)$condition)
     readQcJson(qcFiles = qcFiles,
-               pipeline = ce@pipeline)
+               pipeline = pipeline( ce ))
   }else{
     readQcJson(basepaths = colData(ce)$cromwellBaseOutput,
-               pipeline = ce@pipeline,
+               pipeline = pipeline( ce ),
                subDirName = colData(ce)$`Replicate Group` )
   }
 }
@@ -68,6 +68,13 @@ getCromwellGenome <- function( basepaths, pipeline, subDirName ){
 #' Import peaks from *.narrowPeak file into GRange object
 #'
 #' @param narrowPeak.file File path to the narrow peaks bed file.
+#'
+#' @examples
+#' data(ce_examples)
+#' ce_examples <- rewrite_paths(ce_examples)
+#' 
+#' peaks <- importNarrowPeaksFromFile( colData(ce_examples)$peakFile[1] )
+#' head( peaks )
 #'
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #'
@@ -100,13 +107,24 @@ importNarrowPeaksFromFile <- function(narrowPeak.file){
 #' by default.
 #'
 #' @param object A ChrawExperiment object.
-#' @param includeSamples A character vector specifying the samples to be included in the new experiment. These names should match with `rownames(colData(object))`.
-#' @param peakType A character string. Valid values are 'perSample' to import the peaks called per sample, "idr" to import the IDR peak calls and "overlap" to
+#' @param includeSamples A character vector specifying the samples to be
+#'   included in the new experiment. These names should match with
+#'   `rownames(colData(object))`.
+#' @param peakType A character string. Valid values are 'perSample' to import
+#'   the peaks called per sample, "idr" to import the IDR peak calls and
+#'   "overlap" to
 #' @param merge A logical flag indicating whether peaks should be merged.
 #' @return A ChrawExperiment object with a new experiment added.
 #' @importFrom Rsubread featureCounts
 #' @import BiocParallel
 #' @importFrom random randomStrings
+#' @examples
+#' data(ce_chipseq)
+#' ce_chipseq <- rewrite_paths(ce_chipseq)
+#'
+#' peaks <- importNarrowPeaks( ce_chipseq, merge = TRUE )
+#' head( peaks )
+#'
 #' @export
 importNarrowPeaks <- function( object, includeSamples=rownames(colData(object)), peakType="perSample", merge=FALSE ){
     includeFlag <- includeSamples %in% rownames( colData( object ) )

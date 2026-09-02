@@ -1,2 +1,13 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^chraw\.png$
+^CLAUDE\.md$
+^LICENSE\.md$
+^README\.md$
+^\.github$
+^\.claude$
+^\.claude-flow$
+^\.git$
+^chraw\.BiocCheck$
+^chraw\.Rcheck$
+^chraw_.*\.tar\.gz$

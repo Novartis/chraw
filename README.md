@@ -1,5 +1,4 @@
-
-## Chraw: Chromatin Analysis Workflow [v1.0.0, for R] 
+## Chraw: Chromatin Analysis Workflow [v0.99.0, for R]
  
 ---
 
@@ -10,6 +9,15 @@ chraw is an R package for the analysis of chromatin data and developed by Alejan
 This package builds on top of MultiAssayExperiment and aims to be a simplified version of multiple R-packages (DESeq2, DiffBind, corrplot, ChIPseeker,...) that normally need a substantial contribution of the user in terms of input and comprehension of the documentation. Each major analysis step is shrinked to a single function (differential analysis, correlation plots, PCA,...) and only requires a few inputs from the user. 
 
 The workflow was tested on various cell lines and  experimental designs. 
+
+
+## Installation
+
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("chraw")
+```
 
 Once the package is installed, we are ready to start our chromatin analysis.
 

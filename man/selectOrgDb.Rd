@@ -9,6 +9,10 @@ selectOrgDb(x)
 \arguments{
 \item{x}{A ChrawExperiment object.}
 }
+\value{
+An \code{OrgDb} object, as defined by the \pkg{AnnotationDbi} package,
+with the gene annotation of the organism of \code{x}.
+}
 \description{
 This function inputs a ChrawExperiment and returns
 the corresponding org.\strong{.}.db object for the experiment.

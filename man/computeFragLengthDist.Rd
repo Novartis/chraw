@@ -17,3 +17,14 @@ Data frame with fragment lenghts and thei frequency
 \description{
 Compute fragment length distribution from a paired-end *.bam file.
 }
+\examples{
+data(ce_chipseq)
+ce_chipseq <- rewrite_paths(ce_chipseq)
+indexBam( ce_chipseq )
+
+fragLengths <- computeFragLengthDist(
+    colData(ce_chipseq)$bamFile[1],
+    param = csaw::readParam(pe = "both", restrict = "chr6") )
+head( fragLengths )
+
+}

@@ -1,20 +1,48 @@
 #' Differential analyses of count experiments.
 #'
-#' @description This function inputs a ChrawExperiment object and the name of a count experiment represented
-#' as a SummarizedExperiment within the ChrawExperiment object. Typically, users would to use the addCountExperiment
-#' function to add these count experiments. These inputs are used for inference of differential
-#' signals between conditions. Under the hood, DESeq2 is called and therefore some of the parameters are shared. The
+#' @description This function inputs a ChrawExperiment object and the name of
+#'   a count experiment represented
+#' as a SummarizedExperiment within the ChrawExperiment object. Typically,
+#'   users would to use the addCountExperiment
+#' function to add these count experiments. These inputs are used for
+#'   inference of differential
+#' signals between conditions. Under the hood, DESeq2 is called and therefore
+#'   some of the parameters are shared. The
 #' outputs are stored as part of the rowRanges of the count experiment.
 #'
 #' @param object A ChrawExperiment object.
-#' @param experimentName The name of the count experiment to test, normally added using the `addCountExperiment` function.
-#' @param design A formula specifying the design to fit. See the examples or the ?DESeq documentation for more details.
-#' @param contrasts A list specifying the contrasts to output. Each element of the list must be a character vector with three elements, c("name_of_the_variable", "test_condition", "baseline_condition"). See ?DESeq documentation for more details. If not specified, the last variable from the formula will be used and comparisons between all levels vs the first level will be returned.
-#' @param replaceAll Logical indicating whether the existing results (if any) should be cleared and replace with new ones.
-#' @param dropLevels Logical indicating whether unused levels should be kept in the testing step.
-#' @param useColSizeFactors Logical. If `TRUE`, the numeric values from the column `sizeFactors` is used for library size normalization. Otherwise is calculated with the normal DESeq2 method.
+#' @param experimentName The name of the count experiment to test, normally
+#'   added using the `addCountExperiment` function.
+#' @param design A formula specifying the design to fit. See the examples or
+#'   the ?DESeq documentation for more details.
+#' @param contrasts A list specifying the contrasts to output. Each element
+#'   of the list must be a character vector with three elements,
+#'   c("name_of_the_variable", "test_condition", "baseline_condition"). See
+#'   ?DESeq documentation for more details. If not specified, the last variable
+#'   from the formula will be used and comparisons between all levels vs the
+#'   first level will be returned.
+#' @param replaceAll Logical indicating whether the existing results (if any)
+#'   should be cleared and replace with new ones.
+#' @param dropLevels Logical indicating whether unused levels should be kept
+#'   in the testing step.
+#' @param useColSizeFactors Logical. If `TRUE`, the numeric values from the
+#'   column `sizeFactors` is used for library size normalization. Otherwise is
+#'   calculated with the normal DESeq2 method.
 #'
-#' @return A ChrawExperiment object that include the results of the differential analysis.
+#' @return A ChrawExperiment object that include the results of the
+#'   differential analysis.
+#' @examples
+#' data(ce_examples)
+#' ce_examples <- rewrite_paths(ce_examples)
+#'
+#' ce_examples <- testForDiffSignal(
+#'     ce_examples, experimentName = "Peaks",
+#'     design = ~condition,
+#'     contrasts = list(
+#'         agonist_3h = c("condition", "agonist_3h", "CTRL_3h")),
+#'     replaceAll = TRUE )
+#' getDiffResultSummary( ce_examples )
+#'
 #' @importFrom DESeq2 DESeq DESeqDataSetFromMatrix results
 #' @importMethodsFrom S4Vectors elementMetadata
 #' @export
@@ -125,15 +153,26 @@ testForDiffSignal <- function( object, experimentName, design, contrasts, replac
     object
 }
 
-#' Returns all the results of diffential analyses stored in a ChrawExperiment object.
+#' Returns all the results of diffential analyses stored in a ChrawExperiment
+#'   object.
 #'
-#' @description This function loops over the `experiments()` that were added using the
-#' `addCountData()` function to the ChrawExperiment object, to look for results of
-#' differential testing generated using the `testForDiffSignal()`. It returns a
-#' `data.frame()` that summarizes the results stored in the ChrawExperiment object.
+#' @description This function loops over the `experiments()` that were added
+#'   using the
+#' `addCountData()` function to the ChrawExperiment object, to look for
+#'   results of
+#' differential testing generated using the `testForDiffSignal()`. It returns
+#'   a
+#' `data.frame()` that summarizes the results stored in the ChrawExperiment
+#'   object.
 #'
 #' @param object A ChrawExperiment object.
-#' @return A `data.frame()` summarizing the ChrawExperiment object that include the results of the differential analysis.
+#' @return A `data.frame()` summarizing the ChrawExperiment object that
+#'   include the results of the differential analysis.
+#'
+#' @examples
+#' data(ce_examples)
+#'
+#' getDiffResultSummary( ce_examples )
 #'
 #' @export
 getDiffResultSummary <- function( object ){
@@ -172,19 +211,37 @@ getDiffResultSummary <- function( object ){
     allResults
 }
 
-#' Extracts the results of the differential analysis from a ChrawExperiment object
+#' Extracts the results of the differential analysis from a ChrawExperiment
+#'   object
 #'
-#' @description Having a ChrawExperiment object where results from a differential
-#' analysis were run and stored using the `testForDiffSignal()` object, these function
-#' extract the results of the differential analysis specified in the parameters described
-#' in this man page. For a list of the stored results, consider running the `getDiffResultSummary()`
+#' @description Having a ChrawExperiment object where results from a
+#'   differential
+#' analysis were run and stored using the `testForDiffSignal()` object, these
+#'   function
+#' extract the results of the differential analysis specified in the
+#'   parameters described
+#' in this man page. For a list of the stored results, consider running the
+#'   `getDiffResultSummary()`
 #' function.
 #'
 #' @param object A ChrawExperiment object.
-#' @param experimentName The name of an count experiment added using the `addCountExperiment()` function.
-#' @param contrastName A name of the contrast name to extract. For a list of the contrast names, consider running `getDiffResultSummary()`. If missing, all available results will be returned.
-#' @param outputFormat A character string with one of the following values: "GRanges" (for a GRanges object), "df_wide" (wide data frame), or "df_long" (long data frame).
-#' @return An object containing the results of the differential analysis. The specific format is specified in the `outputFormat=` parameter.
+#' @param experimentName The name of an count experiment added using the
+#'   `addCountExperiment()` function.
+#' @param contrastName A name of the contrast name to extract. For a list of
+#'   the contrast names, consider running `getDiffResultSummary()`. If missing,
+#'   all available results will be returned.
+#' @param outputFormat A character string with one of the following values:
+#'   "GRanges" (for a GRanges object), "df_wide" (wide data frame), or
+#'   "df_long" (long data frame).
+#' @return An object containing the results of the differential analysis. The
+#'   specific format is specified in the `outputFormat=` parameter.
+#'
+#' @examples
+#' data(ce_examples)
+#'
+#' res <- pullDiffResults( ce_examples, experimentName = "Peaks",
+#'                        contrastName = "agonist_3h" )
+#' head( res )
 #'
 #' @export
 pullDiffResults <- function( object, experimentName, contrastName=NULL, outputFormat="GRanges" ){

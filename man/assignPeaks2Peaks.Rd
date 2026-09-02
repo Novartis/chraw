@@ -15,16 +15,24 @@ assignPeaks2Peaks(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{experimentNames}{Vector with two count experiment names, normally added using the \code{addCountExperiment} function.}
+\item{experimentNames}{Vector with two count experiment names, normally
+added using the \code{addCountExperiment} function.}
 
-\item{filterAnnoCols}{Vector with one/two column names in \code{rowData} for peak filtering, e.g. simple_annotation added by the \code{annotateExperimentRegions} function.}
+\item{filterAnnoCols}{Vector with one/two column names in \code{rowData} for
+peak filtering, e.g. simple_annotation added by the
+\code{annotateExperimentRegions} function.}
 
-\item{filterValues}{Vector with one/two values to bes used to filter the peaks, e.g. in case of simple_annotation it can be 'Promoter', 'Intron' etc.}
+\item{filterValues}{Vector with one/two values to bes used to filter the
+peaks, e.g. in case of simple_annotation it can be 'Promoter', 'Intron'
+etc.}
 
-\item{assignFunc}{GenomicRanges function to compare peak sets. Add the moment supported functions include \code{findOverlaps}, \code{precede}, \code{follow} and \code{nearest}.}
+\item{assignFunc}{GenomicRanges function to compare peak sets. Add the
+moment supported functions include \code{findOverlaps}, \code{precede}, \code{follow} and
+\code{nearest}.}
 }
 \value{
-A data.frame combining the rowData from experiment 1 with experiment 2 based on the peak assignment.
+A data.frame combining the rowData from experiment 1 with
+experiment 2 based on the peak assignment.
 }
 \description{
 Assign peaks to peaks either within the same experiment or

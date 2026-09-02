@@ -1,0 +1,15 @@
+citHeader("To cite chraw in publications, please use:")
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "chraw: Analysis of Chromatin and Multi-Omics Datasets",
+  author   = c(
+    person("Ricardo", "Rosa Junior"),
+    person("Alejandro", "Reyes"),
+    person("Sebastian", "Steinhauser"),
+    person("Christian", "Kolter")),
+  year     = format(Sys.Date(), "%Y"),
+  note     = sprintf("R package version %s",
+                     utils::packageVersion("chraw")),
+  url      = "https://github.com/Novartis/chraw"
+)

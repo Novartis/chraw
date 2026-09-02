@@ -10,31 +10,66 @@ annotateExperimentRegions(
   chromHmmAnnotation = NULL,
   flankDistance = 50000,
   activeGeneList = NULL,
-  download = TRUE
+  download = FALSE
 )
 }
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{experimentName}{The name of the count experiment to test, normally added using either the \code{addCountExperiment} function.}
+\item{experimentName}{The name of the count experiment to test, normally
+added using either the \code{addCountExperiment} function.}
 
-\item{chromHmmAnnotation}{Path to an annotation file (.bed format). It should correspond to the type of tissue and genome assembly used to produce the data. Annotation files can be found on \href{https://www.encodeproject.org}{ENCODE} or on the \href{https://egg2.wustl.edu/roadmap/web_portal/chr_state_learning.html}{Roadmap Epigenomics Project webpage}. Annotations not using ChromHMM 15 and 18 state models may lead to incomplete simplified annotations. Please note that the annotation step will order the annotations by their name and use this order when finding overlapping peak. As such, it is advised to use ordered prefixes (eg, "1_TssA", "2_TssAFlnk") in front of the annotation names, so that they can be ordered by importance. Most chromHMM files already contain annotations and colors columns. If no file is provided, a default file will automatically be selected (NHEK cell line, hg19 and hg38 assemblies, liver cells for mm10 assembly). No default file is available for rn6.}
+\item{chromHmmAnnotation}{Path to an annotation file (.bed format). It
+should correspond to the type of tissue and genome assembly used to
+produce the data. Annotation files can be found on
+\href{https://www.encodeproject.org}{ENCODE} or on the
+\href{https://egg2.wustl.edu/roadmap/web_portal/chr_state_learning.html}{Roadmap
+Epigenomics Project webpage}. Annotations not using ChromHMM 15 and 18
+state models may lead to incomplete simplified annotations. Please note
+that the annotation step will order the annotations by their name and use
+this order when finding overlapping peak. As such, it is advised to use
+ordered prefixes (eg, "1_TssA", "2_TssAFlnk") in front of the annotation
+names, so that they can be ordered by importance. Most chromHMM files
+already contain annotations and colors columns. If no file is provided, a
+default file will automatically be selected (NHEK cell line, hg19 and hg38
+assemblies, liver cells for mm10 assembly). No default file is available
+for rn6.}
 
-\item{flankDistance}{Flanking distance to peak used during the annotation step. Default 50Kb.}
+\item{flankDistance}{Flanking distance to peak used during the annotation
+step. Default 50Kb.}
 
-\item{activeGeneList}{A list of Entrez identifiers with 'active' genes. By default (\code{NULL}), peaks are annotated as active genes if they overlap with promoter regions.}
+\item{activeGeneList}{A list of Entrez identifiers with 'active' genes. By
+default (\code{NULL}), peaks are annotated as active genes if they overlap
+with promoter regions.}
 
-\item{download}{Boolean for downloading chromHmm data. Default FALSE.}
+\item{download}{Logical indicating whether the default ChromHMM annotation
+should be downloaded from the ENCODE project when \code{chromHmmAnnotation} is
+not given. Defaults to \code{FALSE}. Downloads are cached with
+\code{BiocFileCache}, so the file is retrieved only once.}
 }
 \value{
-A ChrawExperiment object. Annotation columns are included in \code{rowData(experiments(object)[[experimentName]])}. The most relevant columns are:
+A ChrawExperiment object. Annotation columns are included in
+\code{rowData(experiments(object)[[experimentName]])}. The most relevant
+columns are:
 \itemize{
-\item{'SYMBOL', 'geneId': Symbol and gene IDs of the nearest gene that overlaps with each peaks.}
-\item{'nearest_TSS', 'nearest_TSSIds': Symbol and gene IDs if the nearest TSS.}
-\item{'flank_geneSymb', 'flank_geneIds': Symbol and gene IDs of all genes flanking your peak (distance controlled by 'flankDist' option). Multiple genes can be returned for the same peaks. If so, the respective symbols/IDs are ";" separated in the same cell.}
-\item{'active_geneIds', 'active_geneSymb': Symbol and gene IDs of the active genes, defined by an overlap of the peaks with promoter regions OR by overlap with the regions passed to 'activeGeneList' option. The 'active gene' annotation is only useful for activation marks such as ATAC or TF-ChIP but NOT for methylation marks.}
-\item{'annotation', 'simple_anno': gene-centric annotation and simplified annotations of the peaks.}
-\item{'custom_annot', 'simple_custom_annot': annotation from the custom input that can be passed to 'annot_file' option. Usually this will be chromHMM annotation (this is the case with the default annotation file).}
+\item{'SYMBOL', 'geneId': Symbol and gene IDs of the nearest gene that
+overlaps with each peaks.}
+\item{'nearest_TSS', 'nearest_TSSIds': Symbol and gene IDs if the nearest
+TSS.}
+\item{'flank_geneSymb', 'flank_geneIds': Symbol and gene IDs of all genes
+flanking your peak (distance controlled by 'flankDist' option). Multiple
+genes can be returned for the same peaks. If so, the respective
+symbols/IDs are ";" separated in the same cell.}
+\item{'active_geneIds', 'active_geneSymb': Symbol and gene IDs of the
+active genes, defined by an overlap of the peaks with promoter regions OR
+by overlap with the regions passed to 'activeGeneList' option. The 'active
+gene' annotation is only useful for activation marks such as ATAC or
+TF-ChIP but NOT for methylation marks.}
+\item{'annotation', 'simple_anno': gene-centric annotation and simplified
+annotations of the peaks.}
+\item{'custom_annot', 'simple_custom_annot': annotation from the custom
+input that can be passed to 'annot_file' option. Usually this will be
+chromHMM annotation (this is the case with the default annotation file).}
 }
 }
 \description{
@@ -48,7 +83,9 @@ annotation with overlap with ChromHMM colors.
 data(ce_examples)
 ce_examples <- rewrite_paths(ce_examples)
 
+\donttest{
 ce_examples <- annotateExperimentRegions( ce_examples, "Peaks" )
+}
 
 }
 \seealso{

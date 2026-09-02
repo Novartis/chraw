@@ -2,25 +2,39 @@
 #'
 #' @description The function computes the enrichment of peak annotation in a
 #' subset of differential peaks using a Fisher's exact test. For example,
-#' the enrichment of chromHMM states in differential peaks compared with all peaks.
+#' the enrichment of chromHMM states in differential peaks compared with all
+#'   peaks.
 #'
 #' @param object A ChrawExperiment object.
-#' @param experimentName The name of the count experiment to test, normally added using the `addCountExperiment` function.
-#' @param contrastName The name of the differential peak contrast used in the `testForDiffSignal` function.
-#' @param annoName The name of the peak annotation added with `annotateExperimentRegions` function. This name will be searched in the colnames of the `rowData()` of the 'experimentName'.
-#' @param padjThres Threshold for the adjusted pvalue from the diff peak analysis with `testForDiffSignal`. Default: 0.05.
-#' @param log2FcThrs Threshold for the log2FC from the diff peak analysis. Default: 0.
-#' @param foreground Define which peak set showed be tested, either "up" or "down" regulated peaks. Default: 'up'.
-#' @param background Define which peak set should be used as background in the fisher's exact test, either "all" non diff peaks, "up" and "down". Default: 'all'.
+#' @param experimentName The name of the count experiment to test, normally
+#'   added using the `addCountExperiment` function.
+#' @param contrastName The name of the differential peak contrast used in the
+#'   `testForDiffSignal` function.
+#' @param annoName The name of the peak annotation added with
+#'   `annotateExperimentRegions` function. This name will be searched in the
+#'   colnames of the `rowData()` of the 'experimentName'.
+#' @param padjThres Threshold for the adjusted pvalue from the diff peak
+#'   analysis with `testForDiffSignal`. Default: 0.05.
+#' @param log2FcThrs Threshold for the log2FC from the diff peak analysis.
+#'   Default: 0.
+#' @param foreground Define which peak set showed be tested, either "up" or
+#'   "down" regulated peaks. Default: 'up'.
+#' @param background Define which peak set should be used as background in
+#'   the fisher's exact test, either "all" non diff peaks, "up" and "down".
+#'   Default: 'all'.
 #' @param ... Additional parameters passed to `fisher.test()`.
 #'
 #' @return A data.frame containing following columns:
 #' \itemize{
 #' \item{'annoName': Annotation name from the peak rowData.}
-#' \item{'n_anno_fg_peaks': Number of foreground peaks overlapping the annotation.}
-#' \item{'n_anno_bg_peaks': Number of background peaks overlapping the annotation.}
-#' \item{'conf1': Lower boundry of the log2 odds confidence interval from `fisher.test`.}
-#' \item{'conf2': Upper boundry of the log2 odds confidence interval from `fisher.test`.}
+#' \item{'n_anno_fg_peaks': Number of foreground peaks overlapping the
+#'   annotation.}
+#' \item{'n_anno_bg_peaks': Number of background peaks overlapping the
+#'   annotation.}
+#' \item{'conf1': Lower boundry of the log2 odds confidence interval from
+#'   `fisher.test`.}
+#' \item{'conf2': Upper boundry of the log2 odds confidence interval from
+#'   `fisher.test`.}
 #' \item{'odds': Log2 odds ratio from the test statistic of `fisher.test`.}
 #' \item{'pvalue': pvalue from `fisher.test`.}
 #' }
@@ -31,6 +45,7 @@
 #' data(ce_examples)
 #' ce_examples <- rewrite_paths(ce_examples)
 #'
+#' \donttest{
 #' ce_examples <- testForDiffSignal(
 #'    object=ce_examples, experimentName ="Peaks",
 #'    design = ~condition,
@@ -38,6 +53,7 @@
 #'    agonist_3h=c("condition", "agonist_3h", "CTRL_3h")))
 #' ce_examples <- annotateExperimentRegions( ce_examples, "Peaks" )
 #' ftResults <- enrichAnno(ce_examples,"Peaks",contrastName="agonist_3h",annoName="simple_annotation" )
+#' }
 #'
 #' @export
 #'

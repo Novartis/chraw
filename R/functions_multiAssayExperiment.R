@@ -5,9 +5,20 @@
 #' to the ChrawExperiment object.
 #'
 #' @param object A ChrawExperiment object.
-#' @param maxFragLength A numeric value specifying the maximum fragment length to consider.
+#' @param maxFragLength A numeric value specifying the maximum fragment
+#'   length to consider.
 #' @param BPPARAM A BiocParallel instance for parallelization.
 #' @param ... Further options passed to `csaw::getPESizes()`
+#'
+#' @examples
+#' data(ce_chipseq)
+#' ce_chipseq <- rewrite_paths(ce_chipseq)
+#' indexBam( ce_chipseq )
+#' 
+#' ce_chipseq <- addFragmentLengthDist(
+#'     ce_chipseq,
+#'     param = csaw::readParam(pe = "both", restrict = "chr6") )
+#' experiments( ce_chipseq )
 #'
 #' @import MultiAssayExperiment
 #' @importFrom BiocParallel bplapply
@@ -24,8 +35,12 @@ addFragmentLengthDist <- function( object, maxFragLength = 750,
 
   # Check if *.bams are paired-end
   qcData <- readQcJsonFromCE( object )
-  isPaired <- sapply(qcData, function(x) x[['general']][['seq_endedness']][[1]])
-  if( sum(unlist(isPaired)) != length(isPaired) )
+  ## Each entry of 'seq_endedness' is a list of replicates, each holding a
+  ## single 'paired_end' flag.
+  isPaired <- vapply(qcData, function(x){
+    all( unlist( x[['general']][['seq_endedness']][[1]] ) )
+  }, logical(1))
+  if( !all( isPaired ) )
     stop("Can't compute fragment length distribution from single end bam files")
 
   ## Get input *.bams
@@ -38,13 +53,6 @@ addFragmentLengthDist <- function( object, maxFragLength = 750,
     function(x, ...){
       computeFragLengthDist(x, ...)
     }, BPPARAM = BPPARAM , ... )
-
-  # fragLen.dists <- bplapply(
-  #   bams,
-  #   function(x){
-  #     computeFragLengthDist(x, param=csaw::readParam(pe = "both", restrict="chr1"))
-  #   }, BPPARAM = MulticoreParam(2) )
-  # names(fragLen.dists) <- names(bams)
 
   ## Compute fragment length frequency matrix from tidy fragment length dists
   fragLen.dists <- do.call(rbind, fragLen.dists)
@@ -65,21 +73,39 @@ addFragmentLengthDist <- function( object, maxFragLength = 750,
 #' Adds a count experiment to a ChrawExperiment object
 #'
 #' @description This function inputs a ChrawExperiment and counts the number
-#' of read fragments overlapping with a set of specified genomic ranges. The read
-#' counting can be done either for all samples or only a subset of them. The results
+#' of read fragments overlapping with a set of specified genomic ranges. The
+#'   read
+#' counting can be done either for all samples or only a subset of them. The
+#'   results
 #' are formatted as a SummarizedExperiment object and saved as part of the
 #' ChrawExperiment object.
 #'
 #' @param object A ChrawExperiment object.
-#' @param regions A named GenomicRegions with the genomic coordinates of the regions to count.
+#' @param regions A named GenomicRegions with the genomic coordinates of the
+#'   regions to count.
 #' @param name A string specifying the name of the new experiment.
-#' @param includeSamples A character vector specifying the samples to be included in the new experiment. These names should match with `rownames(colData(object))`.
-#' @param dedup Logical indicating whether to use the bam files without PCR duplicates or not.
+#' @param includeSamples A character vector specifying the samples to be
+#'   included in the new experiment. These names should match with
+#'   `rownames(colData(object))`.
+#' @param dedup Logical indicating whether to use the bam files without PCR
+#'   duplicates or not.
 #' @param isPairedEnd Logical indicating whether reads are paired-end or not.
-#' @param normalizeCPM Logical indicating whether counts should be normalized to CPMs or not.
+#' @param normalizeCPM Logical indicating whether counts should be normalized
+#'   to CPMs or not.
 #' @param BPPARAM A BiocParallel instance.
 #' @param ... additional arguments passed to `featureCounts()`
 #' @return A ChrawExperiment object with a new experiment added.
+#' @examples
+#' data(ce_chipseq)
+#' ce_chipseq <- rewrite_paths(ce_chipseq)
+#' 
+#' peaks <- importNarrowPeaks( ce_chipseq, merge = TRUE )
+#' names(peaks) <- sprintf("Peak%0.5d", seq_along(peaks))
+#' 
+#' ce_chipseq <- addCountExperiment( ce_chipseq, regions = peaks,
+#'                                  name = "Peaks" )
+#' experiments( ce_chipseq )
+#'
 #' @importFrom Rsubread featureCounts
 #' @import BiocParallel
 #' @importFrom random randomStrings
@@ -146,9 +172,9 @@ addCountExperiment <- function( object, regions, name, includeSamples=rownames(c
   ## Normalize counts to CPM
   if(normalizeCPM) {
     libSize <- rowSums(as.matrix(countStats))
-    cpmMatrix <- sapply(names(libSize), function(sample) {
+    cpmMatrix <- vapply(names(libSize), function(sample) {
       10^6*(countMatrix[,sample]/libSize[sample])
-    })
+    }, numeric(nrow(countMatrix)))
     expList[['cpms']] <- cpmMatrix
   }
   ## Combine in SummarizedExperiment
@@ -188,13 +214,32 @@ addExperiment <- function( object, se, name, sampleMap=NULL ){
 #' @param object A ChrawExperiment object.
 #' @param se Either a 'RangedSummarizedExperiment' or a 'DESeqDataSet' object.
 #' @param name A string specifying the name of the new experiment.
-#' @param identifierType A character string specifying the identifier type. Can be 'ENSEMBL', 'ENTREZID' or 'SYMBOL'.
+#' @param identifierType A character string specifying the identifier type.
+#'   Can be 'ENSEMBL', 'ENTREZID' or 'SYMBOL'.
 #' @return A ChrawExperiment object with an RNA-seq experiment added.
+#'
+#' @examples
+#' data(ce_examples)
+#' ce_examples <- rewrite_paths(ce_examples)
+#' 
+#' ## A minimal RNA-seq experiment keyed by ENSEMBL gene identifiers
+#' genes <- GenomicRanges::GRanges(
+#'     "chr6", IRanges::IRanges(c(67100000, 67120000), width = 1000))
+#' names(genes) <- c("ENSMUSG00000000001", "ENSMUSG00000000003")
+#' counts <- matrix(1:16, nrow = 2,
+#'                  dimnames = list(names(genes),
+#'                                  colnames(ce_examples[["Peaks"]])))
+#' rnaSE <- SummarizedExperiment::SummarizedExperiment(
+#'     assays = list(counts = counts), rowRanges = genes)
+#' 
+#' \donttest{
+#' ce_examples <- addRNASeqExperiment( ce_examples, rnaSE, name = "RNA" )
+#' }
 #'
 #' @importFrom ensembldb select
 #'
 #' @export
-addRNASeqExperiment <- function( object, se, name=NULL, identifierType="ENSEMBL" ){
+addRNASeqExperiment <- function( object, se, name, identifierType="ENSEMBL" ){
   if( !is( object, "ChrawExperiment") )
     stop("Parameter 'object' must be a ChrawExperiment object")
   if( !(is( se, "DESeqDataSet") | is( se, "RangedSummarizedExperiment" )) ){
@@ -231,13 +276,13 @@ addRNASeqExperiment <- function( object, se, name=NULL, identifierType="ENSEMBL"
   se <- MultiAssayExperiment(
         experiments=ExperimentList(se),
         colData=colData(se[[name]]))
-    refGen <- object@referenceGenome
-    pipeline <- object@pipeline
+    refGen <- referenceGenome( object )
+    pipe <- pipeline( object )
     object <- c(object, se)
     attributes(experiments(object)[[name]])$metadata$isrnaseq <- TRUE
     new(
         "ChrawExperiment",
         object,
         referenceGenome=refGen,
-        pipeline=pipeline )
+        pipeline=pipe )
 }

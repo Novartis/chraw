@@ -15,27 +15,32 @@ importAndAverage(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{includeSamples}{Vector of strings with sample names to be included in coverage calculation.}
+\item{includeSamples}{Vector of strings with sample names to be included
+in coverage calculation.}
 
 \item{plottingRegion}{A GRanges object with the region to be visualized.}
 
-\item{resolution}{Numerical value for the resolution of the plot. Default value is 100.}
+\item{resolution}{Numerical value for the resolution of the plot. Default
+value is 100.}
 
-\item{smoothIter}{Number of iterations to smooth the plot. Default value is 2.}
+\item{smoothIter}{Number of iterations to smooth the plot. Default value
+is 2.}
 }
 \value{
 Dataframe of coverage data
 }
 \description{
-This function creates a list of \code{GRanges} objects with the average coverage from
-samples of a ChrawExperiment object. \strong{NOTE}: samples names should end with replicate information
+This function creates a list of \code{GRanges} objects with
+the average coverage from
+samples of a ChrawExperiment object. \strong{NOTE}: samples names should end
+with replicate information
 separated by a "_" to create the correct replicate groups.
 }
 \examples{
 data(ce_examples)
 ce_examples <- rewrite_paths(ce_examples)
 
-includeSamples <- rownames(colData(ce_examples))[1:3]
+includeSamples <- rownames(colData(ce_examples))[seq_len(3)]
 plottingRegion <- GRanges("chr6:67090000-67170000")
 covData <- importAndAverage(ce_examples,includeSamples,plottingRegion )
 

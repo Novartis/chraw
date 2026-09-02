@@ -17,25 +17,54 @@ testForDiffSignal(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{experimentName}{The name of the count experiment to test, normally added using the \code{addCountExperiment} function.}
+\item{experimentName}{The name of the count experiment to test, normally
+added using the \code{addCountExperiment} function.}
 
-\item{design}{A formula specifying the design to fit. See the examples or the ?DESeq documentation for more details.}
+\item{design}{A formula specifying the design to fit. See the examples or
+the ?DESeq documentation for more details.}
 
-\item{contrasts}{A list specifying the contrasts to output. Each element of the list must be a character vector with three elements, c("name_of_the_variable", "test_condition", "baseline_condition"). See ?DESeq documentation for more details. If not specified, the last variable from the formula will be used and comparisons between all levels vs the first level will be returned.}
+\item{contrasts}{A list specifying the contrasts to output. Each element
+of the list must be a character vector with three elements,
+c("name_of_the_variable", "test_condition", "baseline_condition"). See
+?DESeq documentation for more details. If not specified, the last variable
+from the formula will be used and comparisons between all levels vs the
+first level will be returned.}
 
-\item{replaceAll}{Logical indicating whether the existing results (if any) should be cleared and replace with new ones.}
+\item{replaceAll}{Logical indicating whether the existing results (if any)
+should be cleared and replace with new ones.}
 
-\item{dropLevels}{Logical indicating whether unused levels should be kept in the testing step.}
+\item{dropLevels}{Logical indicating whether unused levels should be kept
+in the testing step.}
 
-\item{useColSizeFactors}{Logical. If \code{TRUE}, the numeric values from the column \code{sizeFactors} is used for library size normalization. Otherwise is calculated with the normal DESeq2 method.}
+\item{useColSizeFactors}{Logical. If \code{TRUE}, the numeric values from the
+column \code{sizeFactors} is used for library size normalization. Otherwise is
+calculated with the normal DESeq2 method.}
 }
 \value{
-A ChrawExperiment object that include the results of the differential analysis.
+A ChrawExperiment object that include the results of the
+differential analysis.
 }
 \description{
-This function inputs a ChrawExperiment object and the name of a count experiment represented
-as a SummarizedExperiment within the ChrawExperiment object. Typically, users would to use the addCountExperiment
-function to add these count experiments. These inputs are used for inference of differential
-signals between conditions. Under the hood, DESeq2 is called and therefore some of the parameters are shared. The
+This function inputs a ChrawExperiment object and the name of
+a count experiment represented
+as a SummarizedExperiment within the ChrawExperiment object. Typically,
+users would to use the addCountExperiment
+function to add these count experiments. These inputs are used for
+inference of differential
+signals between conditions. Under the hood, DESeq2 is called and therefore
+some of the parameters are shared. The
 outputs are stored as part of the rowRanges of the count experiment.
+}
+\examples{
+data(ce_examples)
+ce_examples <- rewrite_paths(ce_examples)
+
+ce_examples <- testForDiffSignal(
+    ce_examples, experimentName = "Peaks",
+    design = ~condition,
+    contrasts = list(
+        agonist_3h = c("condition", "agonist_3h", "CTRL_3h")),
+    replaceAll = TRUE )
+getDiffResultSummary( ce_examples )
+
 }

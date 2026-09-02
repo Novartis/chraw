@@ -7,19 +7,54 @@
 #' annotation with overlap with ChromHMM colors.
 #'
 #' @param object A ChrawExperiment object.
-#' @param experimentName The name of the count experiment to test, normally added using either the `addCountExperiment` function.
-#' @param chromHmmAnnotation Path to an annotation file (.bed format). It should correspond to the type of tissue and genome assembly used to produce the data. Annotation files can be found on \href{https://www.encodeproject.org}{ENCODE} or on the \href{https://egg2.wustl.edu/roadmap/web_portal/chr_state_learning.html}{Roadmap Epigenomics Project webpage}. Annotations not using ChromHMM 15 and 18 state models may lead to incomplete simplified annotations. Please note that the annotation step will order the annotations by their name and use this order when finding overlapping peak. As such, it is advised to use ordered prefixes (eg, "1_TssA", "2_TssAFlnk") in front of the annotation names, so that they can be ordered by importance. Most chromHMM files already contain annotations and colors columns. If no file is provided, a default file will automatically be selected (NHEK cell line, hg19 and hg38 assemblies, liver cells for mm10 assembly). No default file is available for rn6.
-#' @param flankDistance Flanking distance to peak used during the annotation step. Default 50Kb.
-#' @param download Boolean for downloading chromHmm data. Default FALSE.
-#' @param activeGeneList A list of Entrez identifiers with 'active' genes. By default (\code{NULL}), peaks are annotated as active genes if they overlap with promoter regions.
-#' @return A ChrawExperiment object. Annotation columns are included in `rowData(experiments(object)[[experimentName]])`. The most relevant columns are:
+#' @param experimentName The name of the count experiment to test, normally
+#'   added using either the `addCountExperiment` function.
+#' @param chromHmmAnnotation Path to an annotation file (.bed format). It
+#'   should correspond to the type of tissue and genome assembly used to
+#'   produce the data. Annotation files can be found on
+#'   \href{https://www.encodeproject.org}{ENCODE} or on the
+#'   \href{https://egg2.wustl.edu/roadmap/web_portal/chr_state_learning.html}{Roadmap
+#'   Epigenomics Project webpage}. Annotations not using ChromHMM 15 and 18
+#'   state models may lead to incomplete simplified annotations. Please note
+#'   that the annotation step will order the annotations by their name and use
+#'   this order when finding overlapping peak. As such, it is advised to use
+#'   ordered prefixes (eg, "1_TssA", "2_TssAFlnk") in front of the annotation
+#'   names, so that they can be ordered by importance. Most chromHMM files
+#'   already contain annotations and colors columns. If no file is provided, a
+#'   default file will automatically be selected (NHEK cell line, hg19 and hg38
+#'   assemblies, liver cells for mm10 assembly). No default file is available
+#'   for rn6.
+#' @param flankDistance Flanking distance to peak used during the annotation
+#'   step. Default 50Kb.
+#' @param download Logical indicating whether the default ChromHMM annotation
+#'   should be downloaded from the ENCODE project when `chromHmmAnnotation` is
+#'   not given. Defaults to `FALSE`. Downloads are cached with
+#'   `BiocFileCache`, so the file is retrieved only once.
+#' @param activeGeneList A list of Entrez identifiers with 'active' genes. By
+#'   default (\code{NULL}), peaks are annotated as active genes if they overlap
+#'   with promoter regions.
+#' @return A ChrawExperiment object. Annotation columns are included in
+#'   `rowData(experiments(object)[[experimentName]])`. The most relevant
+#'   columns are:
 #' \itemize{
-#' \item{'SYMBOL', 'geneId': Symbol and gene IDs of the nearest gene that overlaps with each peaks.}
-#' \item{'nearest_TSS', 'nearest_TSSIds': Symbol and gene IDs if the nearest TSS.}
-#' \item{'flank_geneSymb', 'flank_geneIds': Symbol and gene IDs of all genes flanking your peak (distance controlled by 'flankDist' option). Multiple genes can be returned for the same peaks. If so, the respective symbols/IDs are ";" separated in the same cell.}
-#' \item{'active_geneIds', 'active_geneSymb': Symbol and gene IDs of the active genes, defined by an overlap of the peaks with promoter regions OR by overlap with the regions passed to 'activeGeneList' option. The 'active gene' annotation is only useful for activation marks such as ATAC or TF-ChIP but NOT for methylation marks.}
-#' \item{'annotation', 'simple_anno': gene-centric annotation and simplified annotations of the peaks.}
-#' \item{'custom_annot', 'simple_custom_annot': annotation from the custom input that can be passed to 'annot_file' option. Usually this will be chromHMM annotation (this is the case with the default annotation file).}
+#' \item{'SYMBOL', 'geneId': Symbol and gene IDs of the nearest gene that
+#'   overlaps with each peaks.}
+#' \item{'nearest_TSS', 'nearest_TSSIds': Symbol and gene IDs if the nearest
+#'   TSS.}
+#' \item{'flank_geneSymb', 'flank_geneIds': Symbol and gene IDs of all genes
+#'   flanking your peak (distance controlled by 'flankDist' option). Multiple
+#'   genes can be returned for the same peaks. If so, the respective
+#'   symbols/IDs are ";" separated in the same cell.}
+#' \item{'active_geneIds', 'active_geneSymb': Symbol and gene IDs of the
+#'   active genes, defined by an overlap of the peaks with promoter regions OR
+#'   by overlap with the regions passed to 'activeGeneList' option. The 'active
+#'   gene' annotation is only useful for activation marks such as ATAC or
+#'   TF-ChIP but NOT for methylation marks.}
+#' \item{'annotation', 'simple_anno': gene-centric annotation and simplified
+#'   annotations of the peaks.}
+#' \item{'custom_annot', 'simple_custom_annot': annotation from the custom
+#'   input that can be passed to 'annot_file' option. Usually this will be
+#'   chromHMM annotation (this is the case with the default annotation file).}
 #' }
 #' @importFrom rtracklayer import
 #' @seealso annotatePeak, annotatePeakInBatch
@@ -27,11 +62,13 @@
 #' data(ce_examples)
 #' ce_examples <- rewrite_paths(ce_examples)
 #'
+#' \donttest{
 #' ce_examples <- annotateExperimentRegions( ce_examples, "Peaks" )
+#' }
 #'
 #' @export
 annotateExperimentRegions <- function( object, experimentName, chromHmmAnnotation = NULL,
-                                      flankDistance = 50000, activeGeneList = NULL, download = TRUE ){
+                                      flankDistance = 50000, activeGeneList = NULL, download = FALSE ){
     validObject(object)
     if( !is(object, "ChrawExperiment") ){
         stop("The `object=` parameter must be a ChrawExperiment object")
@@ -64,7 +101,16 @@ annotateExperimentRegions <- function( object, experimentName, chromHmmAnnotatio
             select = "first" )$feature
         activeGeneList <- as.vector(na.omit(activeGeneList))
     }
-    txDbActive <- subsetTxDbByGenes(txDb, activeGeneList)
+    ## Regions that do not reach a single promoter leave nothing to build the
+    ## 'active genes' TxDb from. Skip that annotation instead of failing.
+    hasActiveGenes <- length( activeGeneList ) > 0
+    if( hasActiveGenes ){
+        txDbActive <- subsetTxDbByGenes(txDb, activeGeneList)
+    }else{
+        warning(paste("None of the regions overlaps a promoter, so the active",
+                      "gene annotation was skipped and the 'active_*' columns",
+                      "are set to NA."))
+    }
     ## make annotation queries with diff params ##
     message("Annotating regions...")
     annotatePeakParams <- data.frame(
@@ -73,17 +119,35 @@ annotateExperimentRegions <- function( object, experimentName, chromHmmAnnotatio
         overlap=c("all", "TSS", "all", "all"),
         frankDistance = c(5000, 5000, flankDistance, 5000),
         addFlankGeneInfo=c(FALSE, FALSE, TRUE, FALSE) )
+    if( !hasActiveGenes ){
+        annotatePeakParams <-
+            annotatePeakParams[annotatePeakParams$annoName != "Active",]
+    }
     geneCentrAnnos <- lapply( seq_len(nrow(annotatePeakParams)), function(i){
-        annotatePeak(
-            regionRanges,
-            TxDb=get(annotatePeakParams[i,"txDbName"]),
-            tssRegion = c(-3000, 3000),
-            verbose = FALSE,
-            addFlankGeneInfo=annotatePeakParams[i,"addFlankGeneInfo"],
-            annoDb = orgDb$packageName,
-            overlap = annotatePeakParams[i,"overlap"] )
+        ## annotatePeak() errors out when no region has a flanking gene within
+        ## the distance; treat that as "no flanking annotation" instead.
+        tryCatch(
+            annotatePeak(
+                regionRanges,
+                TxDb=get(annotatePeakParams[i,"txDbName"]),
+                tssRegion = c(-3000, 3000),
+                verbose = FALSE,
+                addFlankGeneInfo=annotatePeakParams[i,"addFlankGeneInfo"],
+                flankDistance=annotatePeakParams[i,"frankDistance"],
+                annoDb = orgDb$packageName,
+                overlap = annotatePeakParams[i,"overlap"] ),
+            error=function(e){
+                warning(sprintf(
+                    "The '%s' annotation could not be computed (%s); the corresponding columns are set to NA.",
+                    annotatePeakParams[i,"annoName"], conditionMessage(e)))
+                NULL
+            } )
     } )
     names(geneCentrAnnos) <- annotatePeakParams$annoName
+    geneCentrAnnos <- geneCentrAnnos[!vapply(geneCentrAnnos, is.null, logical(1))]
+    if( !"all" %in% names(geneCentrAnnos) ){
+        stop("The regions could not be annotated against the transcript database.")
+    }
     ## Organize output of annotation queries ##
     resultRanges <- geneCentrAnnos[["all"]]@anno
     ## resultRanges <- regionRanges
@@ -98,6 +162,11 @@ annotateExperimentRegions <- function( object, experimentName, chromHmmAnnotatio
     for( i in seq_len(nrow(outParams)) ){
 ##        mcols(resultRanges)[[outParams$outName[i]]] <-
         ##            mcols(geneCentrAnnos[[outParams$annoName[i]]]@anno)[[outParams$inName[i]]]
+        if( !outParams$annoName[i] %in% names(geneCentrAnnos) ){
+            ## The 'Active' block was skipped: leave its columns as NA.
+            mcols(resultRanges)[[outParams$outName[i]]] <- NA
+            next
+        }
         outRanges <- geneCentrAnnos[[outParams$annoName[i]]]@anno
         ovlR <- findOverlaps( resultRanges, outRanges, type="equal" )
         mcols(resultRanges)[[outParams$outName[i]]] <- NA
@@ -115,7 +184,7 @@ annotateExperimentRegions <- function( object, experimentName, chromHmmAnnotatio
     }
     if( !is.null( chromHmmAnnotation ) ){
         chromHMMData <- import( chromHmmAnnotation, format="bed" )
-        names(chromHMMData) <- sprintf("annFeature%0.9d", seq_len(length(chromHMMData)))
+        names(chromHMMData) <- sprintf("annFeature%0.9d", seq_along(chromHMMData))
         seqlevelsStyle(chromHMMData) <- peakSeqLevs
         chromCentrAnno <- annotatePeakInBatch(
             regionRanges,

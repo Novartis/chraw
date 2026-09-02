@@ -16,22 +16,41 @@ assignPeaks2GeneDE(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{experimentNames}{Vector with two count experiment names, normally added using the \code{addCountExperiment} function.}
+\item{experimentNames}{Vector with two count experiment names, normally
+added using the \code{addCountExperiment} function.}
 
-\item{contrasts}{Contrasts created from \code{testForDiffSignal} function for differential expression analysis.}
+\item{contrasts}{Contrasts created from \code{testForDiffSignal} function for
+differential expression analysis.}
 
 \item{geneAnnoCols}{Annotation column for genes.}
 
-\item{filterAnnoCols}{Vector with one/two column names in \code{rowData} for peak filtering, e.g. simple_annotation added by the \code{annotateExperimentRegions} function.}
+\item{filterAnnoCols}{Vector with one/two column names in \code{rowData} for
+peak filtering, e.g. simple_annotation added by the
+\code{annotateExperimentRegions} function.}
 
-\item{filterValues}{Vector with one/two values to bes used to filter the peaks, e.g. in case of simple_annotation it can be 'Promoter', 'Intron' etc.}
+\item{filterValues}{Vector with one/two values to bes used to filter the
+peaks, e.g. in case of simple_annotation it can be 'Promoter', 'Intron'
+etc.}
 }
 \value{
-A data.frame combining the rowData from experiment 1 with experiment 2 based on the peak assignment.
+A data.frame combining the rowData from experiment 1 with
+experiment 2 based on the peak assignment.
 }
 \description{
 Assign peaks to genes either within the same experiment or
 across experiments using an assignment function such as \code{findOverlaps},
 \code{nearest}, etc. Function should be used with the second experiment added
 by \code{addRNASeqExperiment()} function.
+}
+\examples{
+data(ce_examples)
+ce_examples <- rewrite_paths(ce_examples)
+
+## Requires an RNA-seq experiment added with addRNASeqExperiment()
+\donttest{
+res <- assignPeaks2GeneDE(
+    ce_examples, experimentNames = c("Peaks", "RNA"),
+    contrasts = c("agonist_3h", "agonist_3h") )
+}
+
 }

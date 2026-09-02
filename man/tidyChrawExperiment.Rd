@@ -9,9 +9,11 @@ tidyChrawExperiment(object, experimentName, assayName = "counts")
 \arguments{
 \item{object}{A ChrawExperiment object}
 
-\item{experimentName}{The name of the count experiment, normally added using the \code{addCountExperiment} function.}
+\item{experimentName}{The name of the count experiment, normally added
+using the \code{addCountExperiment} function.}
 
-\item{assayName}{Name of the assay (default: counts) which should be converted from wide to long format.}
+\item{assayName}{Name of the assay (default: counts) which should be
+converted from wide to long format.}
 }
 \value{
 Tidy dataframe of experiment in ChrawExperiment object

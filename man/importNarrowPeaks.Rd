@@ -14,9 +14,13 @@ importNarrowPeaks(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{includeSamples}{A character vector specifying the samples to be included in the new experiment. These names should match with \code{rownames(colData(object))}.}
+\item{includeSamples}{A character vector specifying the samples to be
+included in the new experiment. These names should match with
+\code{rownames(colData(object))}.}
 
-\item{peakType}{A character string. Valid values are 'perSample' to import the peaks called per sample, "idr" to import the IDR peak calls and "overlap" to}
+\item{peakType}{A character string. Valid values are 'perSample' to import
+the peaks called per sample, "idr" to import the IDR peak calls and
+"overlap" to}
 
 \item{merge}{A logical flag indicating whether peaks should be merged.}
 }
@@ -27,4 +31,12 @@ A ChrawExperiment object with a new experiment added.
 This function inputs a ChrawExperiment and imports
 the peak for the specified samples. The output is a GRangesList
 by default.
+}
+\examples{
+data(ce_chipseq)
+ce_chipseq <- rewrite_paths(ce_chipseq)
+
+peaks <- importNarrowPeaks( ce_chipseq, merge = TRUE )
+head( peaks )
+
 }

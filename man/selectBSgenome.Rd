@@ -9,6 +9,10 @@ selectBSgenome(x)
 \arguments{
 \item{x}{A ChrawExperiment object.}
 }
+\value{
+A \link[BSgenome:BSgenome-class]{BSgenome::BSgenome} object with the sequence of the reference
+genome of \code{x}.
+}
 \description{
 This function inputs a ChrawExperiment and returns
 the respective BSgenome object that corresponds to the experiment.

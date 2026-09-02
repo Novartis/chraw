@@ -7,3 +7,7 @@ chromHMMDict <- rbind(
 chromHMMDict <- unique(chromHMMDict)
 
 save(chromHMMDict, file="data/chromHMMDict.RData")
+
+## The dictionary is also stored as internal package data so that
+## simplifyChromHMMLabs() can use it without calling data() at runtime.
+save(chromHMMDict, file = "R/sysdata.rda", compress = "xz")

@@ -2,7 +2,8 @@
 % Please edit documentation in R/functions_diff.R
 \name{pullDiffResults}
 \alias{pullDiffResults}
-\title{Extracts the results of the differential analysis from a ChrawExperiment object}
+\title{Extracts the results of the differential analysis from a ChrawExperiment
+object}
 \usage{
 pullDiffResults(
   object,
@@ -14,19 +15,37 @@ pullDiffResults(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{experimentName}{The name of an count experiment added using the \code{addCountExperiment()} function.}
+\item{experimentName}{The name of an count experiment added using the
+\code{addCountExperiment()} function.}
 
-\item{contrastName}{A name of the contrast name to extract. For a list of the contrast names, consider running \code{getDiffResultSummary()}. If missing, all available results will be returned.}
+\item{contrastName}{A name of the contrast name to extract. For a list of
+the contrast names, consider running \code{getDiffResultSummary()}. If missing,
+all available results will be returned.}
 
-\item{outputFormat}{A character string with one of the following values: "GRanges" (for a GRanges object), "df_wide" (wide data frame), or "df_long" (long data frame).}
+\item{outputFormat}{A character string with one of the following values:
+"GRanges" (for a GRanges object), "df_wide" (wide data frame), or
+"df_long" (long data frame).}
 }
 \value{
-An object containing the results of the differential analysis. The specific format is specified in the \verb{outputFormat=} parameter.
+An object containing the results of the differential analysis. The
+specific format is specified in the \verb{outputFormat=} parameter.
 }
 \description{
-Having a ChrawExperiment object where results from a differential
-analysis were run and stored using the \code{testForDiffSignal()} object, these function
-extract the results of the differential analysis specified in the parameters described
-in this man page. For a list of the stored results, consider running the \code{getDiffResultSummary()}
+Having a ChrawExperiment object where results from a
+differential
+analysis were run and stored using the \code{testForDiffSignal()} object, these
+function
+extract the results of the differential analysis specified in the
+parameters described
+in this man page. For a list of the stored results, consider running the
+\code{getDiffResultSummary()}
 function.
+}
+\examples{
+data(ce_examples)
+
+res <- pullDiffResults( ce_examples, experimentName = "Peaks",
+                       contrastName = "agonist_3h" )
+head( res )
+
 }

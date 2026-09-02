@@ -11,14 +11,29 @@
 \arguments{
 \item{files}{A ChrawExperiment object.}
 
-\item{dedup}{Logical indicating whether to index the deduplicated bam files or the full bam files.}
+\item{dedup}{Logical indicating whether to index the deduplicated bam
+files or the full bam files.}
 
 \item{BPPARAM}{A BiocParallel instance.}
 
-\item{force}{Logical indicating whether indexes should be re-created in case they exist.}
+\item{force}{Logical indicating whether indexes should be re-created in
+case they exist.}
+}
+\value{
+Invisibly returns \code{NULL}. Called for the side effect of
+writing a \code{.bai} index next to each bam file that lacks one.
 }
 \description{
-This function defines the S4 method indexBam for the object ChrawExperiment.
-This method locates the bam file of a ChrawExperiment and creates the indexes
+This function defines the S4 method indexBam for the object
+ChrawExperiment.
+This method locates the bam file of a ChrawExperiment and creates the
+indexes
 for the bam files that are not indexed.
+}
+\examples{
+data(ce_chipseq)
+ce_chipseq <- rewrite_paths(ce_chipseq)
+
+indexBam( ce_chipseq )
+
 }

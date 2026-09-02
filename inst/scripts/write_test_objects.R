@@ -120,7 +120,7 @@ names(Peaks) <- sprintf("Peak%0.5d", seq_len(length(Peaks)))
 ce_rat <- addCountExperiment(
   ce_rat, regions=Peaks,
   includeSamples=rownames(colData(ce_rat)),
-  name="Peaks", BPPARAM=MulticoreParam(2))
+  name="Peaks", BPPARAM=SerialParam())
 
 save(ce_rat, file="data/ce_rat.RData",compress=TRUE)
 ##################################################################################################################################################################################################
@@ -140,24 +140,27 @@ colData(ce_examples)$condition <- c("CTRL_3h","CTRL_3h",
 colnames(colData(ce_examples))[10] <- "Time"
 ce_examples$sample_alias <- gsub("H3K27ac_NR1I3_","",ce_examples$sample_alias)
 
+## Fragment lengths are read straight from the bam files, which therefore need
+## an index. The indexes are build artefacts and are removed at the end of this
+## script so that they are not shipped with the package.
+indexBam(ce_examples)
+
 ce_examples <- addFragmentLengthDist(
   ce_examples,
   param=csaw::readParam(pe = "both", restrict="chr6"),
-  BPPARAM=MulticoreParam(2))
+  BPPARAM=SerialParam())
 
 Samples <- rownames(colData(ce_examples))
 
 Peaks <- importNarrowPeaks( ce_examples,
                             includeSamples=Samples, merge=TRUE )
 
-#Peaks <- Peaks %>% plyranges::filter(seqnames == 'chr6', start >= 67090000, end <= 67170000)
-
-names(Peaks) <- sprintf("Peak%0.5d", seq_len(length(Peaks)))
+names(Peaks) <- sprintf("Peak%0.5d", seq_along(Peaks))
 
 ce_examples <- addCountExperiment(
   ce_examples, regions=Peaks,
   includeSamples=Samples,
-  name="Peaks", BPPARAM=MulticoreParam(2))
+  name="Peaks", BPPARAM=SerialParam())
 
 ce_examples <- testForDiffSignal(
   ce_examples, experimentName="Peaks",
@@ -167,8 +170,35 @@ ce_examples <- testForDiffSignal(
 
 ce_examples <- annotateExperimentRegions( ce_examples, "Peaks" )
 
+## H3K27ac is a broad mark and the MACS2 peaks of this example have a median
+## width of ~270 bp, which splits the signal across many low-count regions. A
+## second experiment counts the same reads in 5 kb windows, which has enough
+## depth for the differential test. The window is wider than the region the
+## reads cover so that the regions also reach genes and can be annotated.
+Bins <- unlist(tile(
+  GRanges("chr6", IRanges(66500000, 67700000)), width=5000))
+names(Bins) <- sprintf("bin%0.5d", seq_along(Bins))
+
+ce_examples <- addCountExperiment(
+  ce_examples, regions=Bins,
+  includeSamples=Samples,
+  name="Bins", BPPARAM=SerialParam())
+
+ce_examples <- testForDiffSignal(
+  ce_examples, experimentName="Bins",
+  design=~condition,
+  contrasts=list(agonist_3h=c("condition", "agonist_3h", "CTRL_3h"),
+                 agonist_27h=c("condition","agonist_27h","CTRL_27h")))
+
+ce_examples <- annotateExperimentRegions( ce_examples, "Bins" )
+
 save(ce_examples, file="data/ce_examples.RData",compress=TRUE)
 ##################################################################################################################################################################################################
 tools::checkRdaFiles("data/")
 tools::resaveRdaFiles("data/", compress = "xz")
 tools::checkRdaFiles("data/")
+
+## Remove the bam indexes created above: they are regenerated on demand with
+## indexBam() and would otherwise inflate the package.
+unlink(list.files("inst/files", pattern = "[.]bai$", recursive = TRUE,
+                  full.names = TRUE))

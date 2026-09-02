@@ -18,22 +18,36 @@ plotDiffScatter(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{experimentNames}{Vector with two count experiment names, normally added using the \code{addCountExperiment} function.}
+\item{experimentNames}{Vector with two count experiment names, normally
+added using the \code{addCountExperiment} function.}
 
-\item{contrasts}{Vector with two contrast names, used to compute diff peak statistics using the \code{testForDiffSignal} function.}
+\item{contrasts}{Vector with two contrast names, used to compute diff peak
+statistics using the \code{testForDiffSignal} function.}
 
-\item{filterAnnoCols}{Vector with one/two column names in \code{rowData} for peak filtering, e.g. simple_annotation added by the \code{annotateExperimentRegions} function.}
+\item{filterAnnoCols}{Vector with one/two column names in \code{rowData} for
+peak filtering, e.g. simple_annotation added by the
+\code{annotateExperimentRegions} function.}
 
-\item{filterValues}{Vector with one/two values to bes used to filter the peaks, e.g. in case of simple_annotation it can be 'Promoter', 'Intron' etc.}
+\item{filterValues}{Vector with one/two values to bes used to filter the
+peaks, e.g. in case of simple_annotation it can be 'Promoter', 'Intron'
+etc.}
 
-\item{assignFunc}{GenomicRanges function to compare peak sets. Add the moment supported functions include \code{findOverlaps}, \code{precede}, \code{follow} and \code{nearest}.}
+\item{assignFunc}{GenomicRanges function to compare peak sets. Add the
+moment supported functions include \code{findOverlaps}, \code{precede}, \code{follow} and
+\code{nearest}.}
 
-\item{geneAnnoCols}{If one of the experiments is an RNA-seq dataset, the param \code{geneAnnoCols} must be a character vector that matches a column name of \code{mcols()} of the other experiment.}
+\item{geneAnnoCols}{If one of the experiments is an RNA-seq dataset, the
+param \code{geneAnnoCols} must be a character vector that matches a column name
+of \code{mcols()} of the other experiment.}
 
-\item{colorByFDR}{A string indicating how to color the points. Values can be either 'mean' (default) to color the point according to the mean q-value (FDR) across experiments, \code{exp1} and \code{exp2} to color by the q-value of individual experiments or 'none'.}
+\item{colorByFDR}{A string indicating how to color the points. Values can
+be either 'mean' (default) to color the point according to the mean
+q-value (FDR) across experiments, \code{exp1} and \code{exp2} to color by the
+q-value of individual experiments or 'none'.}
 }
 \value{
-Scatterplot comparing the log2(FC) of two diff. contrasts/region sets and/or experiments.
+Scatterplot comparing the log2(FC) of two diff. contrasts/region
+sets and/or experiments.
 }
 \description{
 Assign peaks to peaks either within the same experiment or

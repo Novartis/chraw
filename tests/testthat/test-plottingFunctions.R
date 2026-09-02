@@ -93,9 +93,12 @@ test_that("Functions to get metaprofiles work well", {
     expect_identical( rs3[wizExperiments], rs2[wizExperiments] )
 
     rs4 <- reformatMatrixScores( rs1, ce_examples, outputFormat="long_df" )
+    ## Pick a region that is actually present rather than hard-coding a peak
+    ## name, which changes whenever the example data is regenerated.
+    aRegion <- rownames(rs3[[wizExperiments[1]]])[1]
     expect_identical(
-        rs3[[wizExperiments[1]]]["peak055250",],
-        rs4$score[rs4$sampleName == wizExperiments[1] & rs4$regionID == "peak055250"] )
+        rs3[[wizExperiments[1]]][aRegion,],
+        rs4$score[rs4$sampleName == wizExperiments[1] & rs4$regionID == aRegion] )
 
     expect_error(
         reformatMatrixScores( rs1, object=ce_examples, outputFormat="long_df", annotationColumns="nonsense"),

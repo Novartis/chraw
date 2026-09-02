@@ -9,6 +9,10 @@ selectTxDb(x)
 \arguments{
 \item{x}{A ChrawExperiment object.}
 }
+\value{
+A \link[GenomicFeatures:TxDb-class]{GenomicFeatures::TxDb} object with the transcript annotation of
+the reference genome of \code{x}.
+}
 \description{
 This function inputs a ChrawExperiment and returns
 the corresponding TxDb object for the experiment.

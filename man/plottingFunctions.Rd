@@ -24,6 +24,9 @@ plotFragmentLengthDist(object)
 \arguments{
 \item{object}{A ChrawExperiment object.}
 }
+\value{
+A \code{ggplot} object.
+}
 \description{
 These functions parse the QC statistics from the json QC
 file produced by the cromwell pipeline. These functions allow users to

@@ -43,12 +43,23 @@ test_that("Test annotation enrichment function", {
 
   suppressWarnings( ce_examples <- annotateExperimentRegions( ce_examples, "Peaks" ) )
 
-  enrich.res <- enrichAnno( ce_examples, 'Peaks', 'test', 'chromHMM_annotation_simple')
-  #expect_true(is.data.frame(enrich.res))
-  #expect_true(sum(colnames(enrich.res) %in% c('annoName', 'n_anno_fg_peaks',
-  #                                            'n_anno_bg_peaks', 'conf1', 'conf2',
-  #                                            'odds', 'pvalue')) == 7)
+  ## The ChromHMM columns are only added when a ChromHMM file is supplied or
+  ## downloaded, which annotateExperimentRegions() no longer does by default.
+  expect_error(
+    enrichAnno( ce_examples, 'Peaks', 'test', 'chromHMM_annotation_simple'),
+    "Annotation column is not existing" )
 
-  expect_error(plotEnrichResults(enrich.res[,-1]), 'Input data.frame is missing')
-  #expect_s3_class( plotEnrichResults(enrich.res), "gg" )
+  ## enrichAnno() returns NULL when nothing passes the thresholds, which is the
+  ## case for the reduced example data.
+  enrich.res <- enrichAnno( ce_examples, 'Peaks', 'test', 'simple_annotation')
+  expect_true( is.null(enrich.res) || is.data.frame(enrich.res) )
+
+  ## plotEnrichResults() must reject a frame that lost a required column.
+  fakeRes <- data.frame(
+    annoName = c("Promoter", "Intron"),
+    n_anno_fg_peaks = c(5, 3), n_anno_bg_peaks = c(50, 30),
+    conf1 = c(-1, -2), conf2 = c(2, 1), odds = c(0.5, -0.5),
+    pvalue = c(0.01, 0.4) )
+  expect_s3_class( plotEnrichResults(fakeRes), "gg" )
+  expect_error(plotEnrichResults(fakeRes[,-1]), 'Input data.frame is missing')
 })

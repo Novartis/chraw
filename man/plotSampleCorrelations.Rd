@@ -19,21 +19,33 @@ plotSampleCorrelations(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{experimentName}{The name of the count experiment, normally added using \code{addCountExperiment} function.}
+\item{experimentName}{The name of the count experiment, normally added
+using \code{addCountExperiment} function.}
 
-\item{annotationColumns}{A variable name from the metadata to color the points. Must be a column of colData(object).}
+\item{annotationColumns}{A variable name from the metadata to color the
+points. Must be a column of colData(object).}
 
-\item{transformation}{A function specifying a function to apply to the data. We recommend a variance-stabilizing transformation.}
+\item{transformation}{A function specifying a function to apply to the
+data. We recommend a variance-stabilizing transformation.}
 
-\item{includeSamples}{A character vector specifying which samples to include. These must be in \code{rownames(colData(object))}.}
+\item{includeSamples}{A character vector specifying which samples to
+include. These must be in \code{rownames(colData(object))}.}
 
-\item{ntop}{A numeric value indicating the number of top features to use for principal components, selected by highest variance.}
+\item{ntop}{A numeric value indicating the number of top features to use
+for principal components, selected by highest variance.}
 
-\item{annotationColors}{A list of colors passed to the \code{HeatmapAnnotation()} function. For details check \code{?HeatmapAnnotation}.}
+\item{annotationColors}{A list of colors passed to the
+\code{HeatmapAnnotation()} function. For details check \code{?HeatmapAnnotation}.}
 
-\item{sampleLabelColumn}{A column name of the \code{colData(object)} to use for labelling. If missing, the default sample names will be used.}
+\item{sampleLabelColumn}{A column name of the \code{colData(object)} to use for
+labelling. If missing, the default sample names will be used.}
 
-\item{...}{Further parameters passed to the \code{Heatmap()} function. Check \code{?Heatmap} for further details.}
+\item{...}{Further parameters passed to the \code{Heatmap()} function. Check
+\code{?Heatmap} for further details.}
+}
+\value{
+A \code{Heatmap} object from the ComplexHeatmap package, showing the
+Spearman correlation between every pair of samples.
 }
 \description{
 This function plots the pairwise correlation between samples for

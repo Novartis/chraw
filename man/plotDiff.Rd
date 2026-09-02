@@ -25,15 +25,30 @@ plotVolcano(object, ...)
 
 \item{...}{Parameters passed to object-specific methods.}
 
-\item{experimentName}{The name of the count experiment, normally added using the \code{addCountExperiment} function.}
+\item{experimentName}{The name of the count experiment, normally added
+using the \code{addCountExperiment} function.}
 
-\item{contrastName}{A name of the contrast name to extract. For a list of the contrast names, consider running \code{getDiffResultSummary()}. If missing, all available results will be returned.}
+\item{contrastName}{A name of the contrast name to extract. For a list of
+the contrast names, consider running \code{getDiffResultSummary()}. If missing,
+all available results will be returned.}
 
 \item{FDR}{An FDR threshold to assess significance.}
 
-\item{meanFilter}{A numeric value to filter from plotting peaks below these threshold.}
+\item{meanFilter}{A numeric value to filter from plotting peaks below
+these threshold.}
+}
+\value{
+A \code{ggplot} object, faceted by contrast.
 }
 \description{
 These functions document the S4 method plotPCA for
 count experiments of a ChrawExperiment object
+}
+\examples{
+data(ce_examples)
+ce_examples <- rewrite_paths(ce_examples)
+
+plotMA( ce_examples, experimentName = "Peaks" )
+plotVolcano( ce_examples, experimentName = "Peaks" )
+
 }

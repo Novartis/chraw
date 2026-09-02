@@ -47,3 +47,13 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# bam indexes are build artefacts, regenerated with indexBam()
+*.bam.bai
+
+# check / BiocCheck output
+/*.BiocCheck/
+
+# ferramentas locais
+.claude-flow/
+CLAUDE.md

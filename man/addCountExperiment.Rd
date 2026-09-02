@@ -23,17 +23,22 @@ addCountExperiment(
 \arguments{
 \item{object}{A ChrawExperiment object.}
 
-\item{regions}{A named GenomicRegions with the genomic coordinates of the regions to count.}
+\item{regions}{A named GenomicRegions with the genomic coordinates of the
+regions to count.}
 
 \item{name}{A string specifying the name of the new experiment.}
 
-\item{includeSamples}{A character vector specifying the samples to be included in the new experiment. These names should match with \code{rownames(colData(object))}.}
+\item{includeSamples}{A character vector specifying the samples to be
+included in the new experiment. These names should match with
+\code{rownames(colData(object))}.}
 
-\item{dedup}{Logical indicating whether to use the bam files without PCR duplicates or not.}
+\item{dedup}{Logical indicating whether to use the bam files without PCR
+duplicates or not.}
 
 \item{isPairedEnd}{Logical indicating whether reads are paired-end or not.}
 
-\item{normalizeCPM}{Logical indicating whether counts should be normalized to CPMs or not.}
+\item{normalizeCPM}{Logical indicating whether counts should be normalized
+to CPMs or not.}
 
 \item{BPPARAM}{A BiocParallel instance.}
 
@@ -54,8 +59,22 @@ A ChrawExperiment object with a new experiment added.
 }
 \description{
 This function inputs a ChrawExperiment and counts the number
-of read fragments overlapping with a set of specified genomic ranges. The read
-counting can be done either for all samples or only a subset of them. The results
+of read fragments overlapping with a set of specified genomic ranges. The
+read
+counting can be done either for all samples or only a subset of them. The
+results
 are formatted as a SummarizedExperiment object and saved as part of the
 ChrawExperiment object.
+}
+\examples{
+data(ce_chipseq)
+ce_chipseq <- rewrite_paths(ce_chipseq)
+
+peaks <- importNarrowPeaks( ce_chipseq, merge = TRUE )
+names(peaks) <- sprintf("Peak\%0.5d", seq_along(peaks))
+
+ce_chipseq <- addCountExperiment( ce_chipseq, regions = peaks,
+                                 name = "Peaks" )
+experiments( ce_chipseq )
+
 }

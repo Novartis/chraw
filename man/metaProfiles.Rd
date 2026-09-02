@@ -26,7 +26,7 @@ reformatMatrixScores(
 plotMetaProfileHeatmaps(
   object,
   regions,
-  xcoords = c(-1, 0, 1),
+  xcoords = NULL,
   includeSamples,
   inputColumn = "bigwigFile",
   sampleLabelColumn,
@@ -39,23 +39,44 @@ plotMetaProfileHeatmaps(
 
 \item{regions}{GRanges objects containing the regions to plot.}
 
-\item{annotationColumns}{A variable name from the metadata. Must be a column of colData(object).}
+\item{annotationColumns}{A variable name from the metadata. Must be a
+column of colData(object).}
 
-\item{includeSamples}{A character vector specifying which samples to include, these must be in \code{rownames(colData(object))}.}
+\item{includeSamples}{A character vector specifying which samples to
+include, these must be in \code{rownames(colData(object))}.}
 
-\item{inputColumn}{A column of \code{colData(object)} with the paths to the files used to calculate the metaprofiles. These could be either \code{bigwigFile} or \code{bamFile}.}
+\item{inputColumn}{A column of \code{colData(object)} with the paths to the
+files used to calculate the metaprofiles. These could be either
+\code{bigwigFile} or \code{bamFile}.}
 
-\item{outputFormat}{A character vector specifying the output format of the metaprofiles. These could be either "ScoreMatrixList" for a ScoreMatrixList object of the package genomation, "list" for a normal R list or "df_long" for a long-formatted data frame.}
+\item{outputFormat}{A character vector specifying the output format of the
+metaprofiles. These could be either "ScoreMatrixList" for a
+ScoreMatrixList object of the package genomation, "list" for a normal R
+list or "df_long" for a long-formatted data frame.}
 
 \item{...}{Parameters passed to the \code{ScoreMatrixList()} function.}
 
-\item{matrixScores}{An object "ScoreMatrixList" obtained running the function \code{calculateMetaProfiles()}.}
+\item{matrixScores}{An object "ScoreMatrixList" obtained running the
+function \code{calculateMetaProfiles()}.}
 
-\item{xcoords}{A three length vector that specifies the labels of the x-axis of the heatmap. It should contain the labels of the left-most position, center position and right-most position.}
+\item{xcoords}{A vector of three strings with the labels of the left-most,
+centre and right-most positions of the heatmap. If \code{NULL} (the default),
+the labels are derived from the width of \code{regions} and are given in base
+pairs relative to the centre of the region.}
 
-\item{sampleLabelColumn}{A column name of the \code{colData(object)} to use for labelling. If missing, the default sample names will be used.}
+\item{sampleLabelColumn}{A column name of the \code{colData(object)} to use for
+labelling. If missing, the default sample names will be used.}
 
-\item{keep}{Lower and upper quantile values to trim the matrix heatmap when plotting. Useful to avoid artifacts due to outliers.}
+\item{keep}{Lower and upper quantile values to trim the matrix heatmap
+when plotting. Useful to avoid artifacts due to outliers.}
+}
+\value{
+For \code{calculateMetaProfiles()}, a \code{ScoreMatrixList}, a list of
+matrices or a long data frame, according to \code{outputFormat}. For
+\code{reformatMatrixScores()}, a long data frame or a list of matrices.
+For \code{plotMetaProfileHeatmaps()}, a \code{HeatmapList} object.
+
+A \code{Heatmap} object from the ComplexHeatmap package.
 }
 \description{
 These functions provide functionalities to plot the
@@ -68,7 +89,7 @@ data(ce_examples)
 
 ce_examples <- rewrite_paths(ce_examples)
 
-peaks <- GenomicRanges::resize(rowRanges(ce_examples[[3]])[1:100,], 10^3, fix = 'center')
+peaks <- GenomicRanges::resize(rowRanges(ce_examples[["Peaks"]])[seq_len(100),], 10^3, fix = 'center')
 matrix <- calculateMetaProfiles(object = ce_examples, regions = peaks)
 
 }

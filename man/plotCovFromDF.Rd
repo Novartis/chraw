@@ -16,28 +16,33 @@ plotCovFromDF(
 \arguments{
 \item{covData}{Coverage data resulted from importAndAverage function.}
 
-\item{replicate_group}{String containing the name of the replicate group to be plotted.}
+\item{replicate_group}{String containing the name of the replicate group
+to be plotted.}
 
-\item{plottingRegion}{GRanges object of the plotting region to be visualized.}
+\item{plottingRegion}{GRanges object of the plotting region to be
+visualized.}
 
 \item{ylim}{Value of the limit in the y-axis. Default value is \code{NULL}.}
 
 \item{cl}{String with the color of the bins. Default value is "black".}
 
-\item{yexpand}{Logical. If TRUE, the default, adds a small expansion factor to the limits to ensure that data and axes don't overlap. If FALSE, limits are taken exactly from the data or ylim.}
+\item{yexpand}{Logical. If TRUE, the default, adds a small expansion
+factor to the limits to ensure that data and axes don't overlap. If FALSE,
+limits are taken exactly from the data or ylim.}
 }
 \value{
 ggplot object
 }
 \description{
-This function creates the plot to visualize coverage data in a specific plotting region.
+This function creates the plot to visualize coverage data in
+a specific plotting region.
 It takes as input the return value of the \link{importAndAverage} function.
 }
 \examples{
 data(ce_examples)
 ce_examples <- rewrite_paths(ce_examples)
 
-includeSamples <- rownames(colData(ce_examples))[1:3]
+includeSamples <- rownames(colData(ce_examples))[seq_len(3)]
 plottingRegion <- GRanges("chr6:67090000-67170000")
 covData <- importAndAverage(ce_examples,includeSamples, plottingRegion )
 plot <- plotCovFromDF(covData,replicate_group="H3K27ac_NR1I3_CTRL_3h",plottingRegion, cl="red")
