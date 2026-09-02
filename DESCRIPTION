@@ -2,7 +2,7 @@ Package: chraw
 Title: Analysis of Chromatin and Multi-Omics Datasets
 Version: 0.99.0
 Authors@R: c(
-    person("Ricardo", "Rosa Junior", email = "ricardo.rosa@hc.fm.usp.br",
+    person("Ricardo", "Rosa Junior", email = "rrosajunior2@gmail.com",
            role = c("aut", "cre")),
     person("Alejandro", "Reyes", email = "alejandro.reyes_quiroz@novartis.com",
            role = "aut"),

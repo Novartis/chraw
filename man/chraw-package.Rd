@@ -41,7 +41,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ricardo Rosa Junior \email{ricardo.rosa@hc.fm.usp.br}
+\strong{Maintainer}: Ricardo Rosa Junior \email{rrosajunior2@gmail.com}
 
 Authors:
 \itemize{
